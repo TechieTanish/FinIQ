@@ -3,6 +3,10 @@
 FinIQ is a collaborative startup-style project developed by the BCA students, blending finance, tech, 
 and smart tools into a single dashboard-based solution.
 
+
+![FinIQ](https://github.com/user-attachments/assets/1c7a793e-ac7c-4514-812e-17032d0e7f31)
+
+
 ## 📌 Features
 
 - 🖥️ **Dashboard-based Interface**
