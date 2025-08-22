@@ -1,59 +1,85 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>FinQ - Smart Finance Tracker</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FINQ – Dashboard</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+  <!-- ========================= Navbar ========================= -->
+  <header class="navbar">
+    <div class="nav-wrap">
+      <!-- Brand -->
+      <a href="#home" class="brand">
+        <div class="logo">F</div>
+        <div class="brand-name">FINQ</div>
+      </a>
 
-    <!-- Navbar -->
-    <nav>
-        <div class="logo">FinQ</div>
-        <ul>
-            <li><a href="#">Home</a></li>
-            <li><a href="#features">Features</a></li>
-            <li><a href="#">About</a></li>
-            <li><a href="#">Login</a></li>
-        </ul>
-    </nav>
-
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="hero-text">
-            <h1>Track. Save. Grow.</h1>
-            <p>FinQ helps you manage your money smarter — track spending, save more, and achieve your financial goals.</p>
-            <button class="cta-btn" onclick="scrollToFeatures()">Get Started</button>
+      <!-- Desktop nav links (center aligned) -->
+      <nav class="nav-links">
+        <a class="nav-item" href="#home">Home</a>
+        <a class="nav-item" href="#about">About</a>
+        <a class="nav-item" href="#blog">Blog</a>
+        <a class="nav-item" href="#features">Features</a>
+        <a class="nav-item" href="#help">Help</a>
+        <div class="nav-item theme" tabindex="0">
+          Theme ▾
+          <div class="theme-menu">
+            <button class="theme-option" data-theme="light">🌞 Light</button>
+            <button class="theme-option" data-theme="dark">🌙 Dark</button>
+          </div>
         </div>
-        <img src="https://images.unsplash.com/photo-1556741533-411cf82e4e2b" alt="Finance Image">
-    </section>
+      </nav>
 
-    <!-- Features Section -->
-    <section id="features" class="features">
-        <div class="feature-card">
-            <img src="https://img.icons8.com/fluency/96/money-bag.png" alt="Track">
-            <h3>Track Expenses</h3>
-            <p>Record every transaction and see where your money goes.</p>
-        </div>
-        <div class="feature-card">
-            <img src="https://img.icons8.com/fluency/96/savings.png" alt="Save">
-            <h3>Save Smarter</h3>
-            <p>Set saving goals and monitor progress easily.</p>
-        </div>
-        <div class="feature-card">
-            <img src="https://img.icons8.com/fluency/96/combo-chart.png" alt="Grow">
-            <h3>Grow Wealth</h3>
-            <p>Get insights and tips for growing your financial health.</p>
-        </div>
-    </section>
+      <!-- Login button (extreme right) -->
+      <button class="login-btn">Login</button>
 
-    <!-- Footer -->
-    <footer>
-        <p>© 2025 FinQ. All Rights Reserved.</p>
-    </footer>
+      <!-- Mobile hamburger -->
+      <button class="hamburger" aria-label="Open Menu">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </button>
+    </div>
 
-    <script src="script.js"></script>
+    <!-- Mobile panel -->
+    <div id="mobile-panel" class="mobile-panel">
+      <a class="mobile-link" href="#home">Home</a>
+      <a class="mobile-link" href="#about">About</a>
+      <a class="mobile-link" href="#blog">Blog</a>
+      <a class="mobile-link" href="#features">Features</a>
+      <a class="mobile-link" href="#help">Help</a>
+      <div class="mobile-theme">
+        <div style="font-weight:700; margin-bottom:6px;">Theme</div>
+        <div style="display:grid; gap:6px;">
+          <button class="theme-option" data-theme="light">🌞 Light</button>
+          <button class="theme-option" data-theme="dark">🌙 Dark</button>
+        </div>
+      </div>
+      <button class="login-btn">Login</button>
+    </div>
+  </header>
+
+  <!-- ========================= Hero ========================= -->
+  <main id="home">
+    <div class="hero-wrap">
+      <section class="hero">
+        <div class="hero-content">
+          <h1 class="hero-title">Finance made simple, fast, and smart.</h1>
+          <p class="hero-sub">FINQ helps you track, analyze, and grow your money with clean dashboards, real-time insights, and delightful UX.</p>
+        </div>
+        <div class="cta-wrap">
+          <a href="#get-started" class="cta">Get Started</a>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer>
+    © <span id="year"></span> FINQ. All rights reserved.
+  </footer>
+
+  <script src="script.js"></script>
 </body>
 </html>
