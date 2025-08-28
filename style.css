@@ -2,6 +2,7 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { font-family: 'Poppins', sans-serif; background: var(--bg); color: var(--text); transition: all 0.3s ease; scroll-behavior: smooth; }
 
+
 :root {
   --bg: #f8f9fa;
   --text: #222;
@@ -18,16 +19,20 @@ body.dark {
   --frame: #1e1e1e;
 }
 
+
 /* Navbar */
 .navbar { display: flex; justify-content: space-between; align-items: center; padding: 10px 20px; background: var(--frame); position: sticky; top: 0; z-index: 100; border-bottom: 1px solid #ddd; }
 .navbar button, .navbar select { margin-left: 8px; padding: 6px 12px; border-radius: 8px; border: none; cursor: pointer; background: var(--budget); color: #fff; }
 .logo-container { display: flex; align-items: center; gap: 10px; }
 .logo-text { font-size: 24px; font-weight: bold; color: var(--finq-color); transition: color 1s linear; }
-.logo-img { width: 40px; height: 40px; object-fit: contain; border-radius: 50%; background: yellow; display: flex; align-items: center; justify-content: center; }
+/* Logo polish */
+.logo-img { width: 40px; height: 40px; object-fit: contain; border-radius: 50%; background: #fff7d1; padding: 5px; box-shadow: 0 0 8px rgba(0,0,0,0.1); }
+
 
 /* Greeting Image */
 .greeting-section { background: #ffeb3b; display: flex; justify-content: center; align-items: center; padding: 20px; }
 .greeting-img { width: 100%; height: auto; object-fit: cover; border-radius: 12px; }
+
 
 /* Sidebar */
 .sidebar { position: fixed; top: 0; right: -320px; width: 300px; height: 100%; background: var(--frame); padding: 20px; box-shadow: -3px 0 10px rgba(0,0,0,0.2); transition: right 0.4s ease; z-index: 200; }
@@ -35,9 +40,13 @@ body.dark {
 .sidebar img { border-radius: 50%; }
 .budget-row { display: flex; gap: 10px; align-items: center; margin-bottom: 10px; }
 #close-sidebar { margin-top: 10px; display: block; }
+/* Show budget message */
+.budget-msg { margin-top: 8px; padding: 8px; background: #e3f2fd; color: #1976d2; border-radius: 8px; font-size: 14px; text-align: center; }
+
 
 /* Section Titles */
 .section-title { margin: 20px; font-size: 20px; border-bottom: 2px solid var(--budget); padding-bottom: 4px; }
+
 
 /* Cards */
 .cards { display: flex; gap: 20px; justify-content: space-around; flex-wrap: wrap; padding: 20px; }
@@ -50,16 +59,19 @@ body.dark {
 .card.budget { background: var(--budget); }
 .card.budget:hover { box-shadow: 0 0 20px var(--budget); }
 
+
 /* Progress */
 .progress { padding: 20px; }
 .progress-bar { height: 20px; background: #ddd; border-radius: 20px; overflow: hidden; }
 #progress-fill { height: 20px; width: 0%; background: var(--budget); transition: width 0.5s ease; }
 #nudge { margin-top: 10px; font-style: italic; }
 
+
 /* Filters */
 .filters { padding: 20px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
 .filter { padding: 6px 12px; border-radius: 20px; border: none; cursor: pointer; background: var(--budget); color: #fff; transition: 0.3s; }
 .filter.active { background: var(--income); }
+
 
 /* Transactions */
 .transactions { padding: 20px; }
@@ -69,9 +81,11 @@ body.dark {
 .transactions li:last-child { border-bottom: none; }
 .transactions li.empty-msg { text-align: center; font-style: italic; color: #555; }
 
+
 /* FAB */
 .fab { position: fixed; bottom: 20px; right: 20px; background: var(--budget); color: #fff; font-size: 24px; padding: 16px; border: none; border-radius: 50%; box-shadow: 0 4px 12px rgba(0,0,0,0.3); cursor: pointer; transition: 0.3s; }
 .fab:hover { transform: scale(1.1); }
+
 
 /* Popup */
 .popup { position: fixed; bottom: -100%; left: 0; width: 100%; background: var(--frame); box-shadow: 0 -4px 20px rgba(0,0,0,0.3); padding: 20px; border-radius: 20px 20px 0 0; transition: bottom 0.4s ease; z-index: 150; }
@@ -82,6 +96,50 @@ body.dark {
 .popup-actions button { flex: 1; margin: 5px; padding: 10px; border: none; border-radius: 8px; cursor: pointer; }
 .popup-actions #save-expense { background: var(--income); color: #fff; }
 .popup-actions #close-popup { background: var(--expense); color: #fff; }
+
+
+/* NEW Add Income/Expense Cards */
+.action-cards { display: flex; gap: 20px; justify-content: center; margin: 20px; flex-wrap: wrap; }
+.action-card { flex: 1; min-width: 200px; max-width: 90px; height: 60px; border-radius: var(--card-radius); display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: bold; color: #fff; cursor: pointer; transition: transform 0.3s ease, box-shadow 0.3s ease; }
+.action-card:hover { transform: scale(1.05); }
+.income-card { background: var(--income); }
+.income-card:hover { box-shadow: 0 0 20px var(--income); }
+.expense-card { background: var(--expense); }
+.expense-card:hover { box-shadow: 0 0 20px var(--expense); }
+
+.marquee-container {
+  position: fixed;
+  top: 56px; /* Adjust as per navbar height */
+  width: 100%;
+  background: linear-gradient(90deg, #ff9933, #ffcc66);
+  color: #1a1a1a;
+  font-weight: 600;
+  font-size: 16px;
+  padding: 10px 40px 10px 20px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+  display: flex;
+  align-items: center;
+  z-index: 1000;
+}
+
+.marquee-container marquee {
+  flex: 1;
+  white-space: nowrap;
+}
+
+#close-marquee {
+  background: transparent;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 0 10px;
+  color: #1a1a1a;
+  transition: color 0.2s ease;
+}
+#close-marquee:hover {
+  color: #660000;
+}
+
 
 /* Responsive */
 @media(max-width: 768px) {

@@ -9,77 +9,96 @@
 </head>
 <body>
   <!-- Navbar -->
-  <nav class="navbar">
-    <div class="logo-container">
-      <img src="Images/logo.png" alt="FINQ
-    " class="logo-img">
-      <div class="logo-text">FINQ</div>
+ <nav class="navbar">
+  <div class="logo-container">
+    <div class="logo-box">
+      <img src="Images/LOGO(FinQ).png" alt="FINQ Logo" class="logo-img" />
     </div>
-    <div class="controls">
-      <select id="language-switch">
-        <option value="en">EN</option>
-        <option value="hi">हिंदी</option>
-      </select>
-      <button id="theme-toggle">🌙</button>
-      <button id="profile-btn">👤</button>
-    </div>
-  </nav>
+    <div class="logo-text">FINQ</div>
+  </div>
+  <div class="controls">
+    <select id="language-switch">
+      <option value="en">EN</option>
+      <option value="hi">हिंदी</option>
+    </select>
+    <button id="theme-toggle">🌙</button>
+    <button id="profile-btn">👤</button>
+  </div>
+</nav>
 
-  <!-- Greetings Image -->
+
+  <!-- Greetings -->
   <section class="greeting-section">
     <img src="Images/Greetings.png" alt="Greetings" class="greeting-img">
   </section>
 
   <!-- Profile Sidebar -->
   <aside id="profile-sidebar" class="sidebar">
-    <h2 id="profile-title">👤 Profile</h2>
-    <img src="https://via.placeholder.com/80" alt="Profile" class="profile-pic">
-    <p id="profile-name">Name: <strong>You</strong></p>
-    <div class="budget-row">
-      <label id="budget-label">Monthly Budget: <input type="number" placeholder="₹10000"></label>
-      <button id="add-budget">Add</button>
+    <h2>👤 My Profile</h2>
+    <div class="profile-card">
+      <img src="https://via.placeholder.com/80" alt="Profile" class="profile-pic">
+      <p><strong>Name:</strong> You</p>
+      <div class="budget-row">
+        <input type="number" id="budget-input" placeholder="Enter Monthly Budget (₹)">
+        <button id="add-budget">Set Budget</button>
+      </div>
+      <p id="budget-msg" class="budget-msg"></p>
+      <div class="settings">
+        <label>Font Size:
+          <select id="font-size">
+            <option value="small">Small</option>
+            <option value="medium" selected>Medium</option>
+            <option value="large">Large</option>
+          </select>
+        </label>
+      </div>
+      <button id="close-sidebar" class="close-btn">Close</button>
     </div>
-    <label id="fontsize-label">Font Size:
-      <select id="font-size">
-        <option value="small">Small</option>
-        <option value="medium" selected>Medium</option>
-        <option value="large">Large</option>
-      </select>
-    </label>
-    <button id="close-sidebar">Close</button>
   </aside>
 
   <!-- Dashboard -->
   <main class="dashboard">
     <!-- Summary Cards -->
-    <h2 class="section-title" id="overview-title">📌 Overview</h2>
+    <h2 class="section-title">📌 Overview</h2>
     <section class="cards">
       <div class="card income">
-        <h3 id="income-title">💰 Income</h3>
+        <h3>💰 Income</h3>
         <p id="income-amount">₹0</p>
       </div>
       <div class="card expense">
-        <h3 id="expense-title">💸 Expense</h3>
+        <h3>💸 Expense</h3>
         <p id="expense-amount">₹0</p>
       </div>
       <div class="card budget">
-        <h3 id="budget-title">🎯 Budget Left</h3>
+        <h3>🎯 Balance</h3>
         <p id="budget-amount">₹0</p>
       </div>
     </section>
 
     <!-- Budget Progress -->
     <section class="progress">
-      <h2 class="section-title" id="progress-title">📈 Budget Usage</h2>
+      <h2 class="section-title">📈 Budget Usage</h2>
       <div class="progress-bar">
         <div id="progress-fill"></div>
       </div>
-      <p id="nudge">✨ Track your first expense to see insights!</p>
+      <p id="nudge">✨ Track your first transaction to see insights!</p>
     </section>
 
-    <!-- Filter Tabs -->
+    <!-- Action Cards -->
+    <section class="action-cards">
+      <div class="action-card income-card" id="add-income">
+        <h3>➕ Add Income</h3>
+      </div>
+      <div class="action-card expense-card" id="add-expense">
+        <h3>➖ Add Expense</h3>
+      </div>
+    </section>
+
+    <!-- Filters -->
     <section class="filters">
       <button class="filter active" data-type="all">All</button>
+      <button class="filter" data-type="income">Income</button>
+      <button class="filter" data-type="expense">Expense</button>
       <button class="filter" data-type="food">Food</button>
       <button class="filter" data-type="travel">Travel</button>
       <button class="filter" data-type="rent">Rent</button>
@@ -88,39 +107,32 @@
 
     <!-- Transactions -->
     <section class="transactions">
-      <h2 class="section-title" id="transaction-title">💬 Transactions</h2>
+      <h2 class="section-title">💬 Transactions</h2>
       <div class="transaction-frame">
         <ul id="transaction-list" class="empty">
-          <li class="empty-msg">👋 Welcome to FINQ! Start by adding your first expense ➕</li>
+          <li class="empty-msg">👋 Welcome to FINQ! Start by adding a transaction ➕</li>
         </ul>
       </div>
     </section>
   </main>
 
-  <!-- Add Expense Modal -->
-  <div id="expense-popup" class="popup">
+  <!-- Add Transaction Modal -->
+  <div id="transaction-popup" class="popup">
     <div class="popup-content">
-      <h3 id="add-expense-title">➕ Add Expense</h3>
+      <h3 id="add-transaction-title">➕ Add Transaction</h3>
+      <p id="error-msg" class="error"></p>
       <input type="number" id="amount" placeholder="Amount (₹)">
-      <select id="category">
-        <option value="food">🍔 Food</option>
-        <option value="travel">🚖 Travel</option>
-        <option value="rent">🏠 Rent</option>
-        <option value="others">📦 Others</option>
-      </select>
+      <select id="category"></select>
       <select id="mode">
         <option value="cash">💵 Cash</option>
         <option value="upi">📱 UPI</option>
       </select>
       <input type="text" id="notes" placeholder="Notes (optional)">
       <div class="popup-actions">
-        <button id="save-expense">Save</button>
+        <button id="save-transaction">Save</button>
         <button id="close-popup">Cancel</button>
       </div>
     </div>
   </div>
-
-  <!-- Floating Action Button -->
-  <button class="fab" id="add-expense">➕</button>
 </body>
 </html>
