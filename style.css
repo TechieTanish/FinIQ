@@ -107,38 +107,6 @@ body.dark {
 .expense-card { background: var(--expense); }
 .expense-card:hover { box-shadow: 0 0 20px var(--expense); }
 
-.marquee-container {
-  position: fixed;
-  top: 56px; /* Adjust as per navbar height */
-  width: 100%;
-  background: linear-gradient(90deg, #ff9933, #ffcc66);
-  color: #1a1a1a;
-  font-weight: 600;
-  font-size: 16px;
-  padding: 10px 40px 10px 20px;
-  box-shadow: 0 3px 8px rgba(0,0,0,0.15);
-  display: flex;
-  align-items: center;
-  z-index: 1000;
-}
-
-.marquee-container marquee {
-  flex: 1;
-  white-space: nowrap;
-}
-
-#close-marquee {
-  background: transparent;
-  border: none;
-  font-size: 20px;
-  cursor: pointer;
-  padding: 0 10px;
-  color: #1a1a1a;
-  transition: color 0.2s ease;
-}
-#close-marquee:hover {
-  color: #660000;
-}
 
 
 /* Responsive */

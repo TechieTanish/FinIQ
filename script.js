@@ -12,8 +12,9 @@ document.getElementById("close-sidebar").addEventListener("click", () => sidebar
 
 // Font Size
 document.getElementById("font-size").addEventListener("change", (e) => {
-  document.body.style.fontSize = e.target.value === "small" ? "14px" :
-                                 e.target.value === "large" ? "18px" : "16px";
+  document.body.style.fontSize =
+    e.target.value === "small" ? "14px" :
+    e.target.value === "large" ? "18px" : "16px";
 });
 
 // Animated Logo
@@ -22,9 +23,12 @@ let colors = ["#ff9933","#ffffff","#138808"];
 let idx = 0;
 setInterval(() => { finqText.style.color = colors[idx]; idx = (idx+1)%colors.length; }, 1500);
 
-// Transactions Data
-let transactions = JSON.parse(localStorage.getItem("transactions")) || [];
-let budget = parseInt(localStorage.getItem("budget")) || 10000;
+// ===== API BASE =====
+const API = 'http://localhost:8080/api/v1'; // Express server base URL [1]
+
+// ===== App State (fetched from API) =====
+let transactions = []; // will be loaded from /transactions [1]
+let budget = 10000;    // will be loaded from /budget [1]
 
 // DOM Elements
 const transactionList = document.getElementById("transaction-list");
@@ -49,7 +53,69 @@ const categories = {
   ]
 };
 
-// Render Transactions
+// ===== API Helpers =====
+async function loadTransactions() {
+  const res = await fetch(`${API}/transactions`);
+  transactions = await res.json();
+  renderTransactions();
+} // [4][1]
+
+async function createTransaction({ amount, type, category, mode, notes }) {
+  const res = await fetch(`${API}/transactions`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ amount, type, category, mode, notes })
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.error || 'Failed to create transaction');
+  }
+  return res.json();
+} // [4][1]
+
+async function updateTransaction(id, data) {
+  const res = await fetch(`${API}/transactions/${id}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data)
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.error || 'Failed to update transaction');
+  }
+  return res.json();
+} // [4][1]
+
+async function deleteTransactionById(id) {
+  const res = await fetch(`${API}/transactions/${id}`, { method: 'DELETE' });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.error || 'Failed to delete transaction');
+  }
+  return res.json();
+} // [4][1]
+
+async function loadBudget() {
+  const res = await fetch(`${API}/budget`);
+  const data = await res.json();
+  budget = data.budget ?? 10000;
+  renderTransactions();
+} // [4][1]
+
+async function saveBudget(newB) {
+  const res = await fetch(`${API}/budget`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ budget: newB })
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.error || 'Failed to save budget');
+  }
+  await loadBudget();
+} // [4][1]
+
+// ===== Render =====
 function renderTransactions(){
   transactionList.innerHTML = "";
   if(transactions.length===0){
@@ -58,21 +124,24 @@ function renderTransactions(){
     progressFill.style.width="0%"; return;
   }
   let income=0, expense=0;
-  transactions.forEach((tx,i)=>{
+  transactions.forEach((tx)=>{
     const li=document.createElement("li");
     li.style.color=tx.type==="income"?"green":"red";
-    li.innerHTML=`₹${tx.amount} - ${tx.type} (${tx.category}, ${tx.mode}) ${tx.notes||""}
-      <button onclick="editTransaction(${i})">✏️</button>
-      <button onclick="deleteTransaction(${i})">🗑</button>`;
-    li.dataset.type=tx.type; li.dataset.category=tx.category;
+    li.dataset.type=tx.type;
+    li.dataset.category=tx.category;
+    li.dataset.id = tx.id; // use backend id for actions [1]
+
+    li.innerHTML = `₹${tx.amount} - ${tx.type} (${tx.category}, ${tx.mode}) ${tx.notes||""}
+      <button onclick="startEdit('${tx.id}')">✏️</button>
+      <button onclick="handleDelete('${tx.id}')">🗑</button>`;
+
     transactionList.appendChild(li);
     if(tx.type==="income") income += tx.amount; else expense+=tx.amount;
   });
   incomeEl.textContent=`₹${income}`; expenseEl.textContent=`₹${expense}`;
   balanceEl.textContent=`₹${income-expense}`;
   progressFill.style.width=Math.min((expense/budget)*100,100)+"%";
-}
-renderTransactions();
+} // [1]
 
 // Popup
 const popup=document.getElementById("transaction-popup");
@@ -101,59 +170,104 @@ function loadCategories(type){
   });
 }
 
-// Save Transaction
-document.getElementById("save-transaction").addEventListener("click",()=>{
+// ===== Create (Save) =====
+document.getElementById("save-transaction").addEventListener("click", async ()=>{
   const amount=parseInt(document.getElementById("amount").value);
   const category=document.getElementById("category").value;
   const mode=document.getElementById("mode").value;
   const notes=document.getElementById("notes").value;
+
   if(!amount){ errorMsg.textContent="⚠️ Please enter amount"; return;}
-  transactions.push({amount,type:currentType,category,mode,notes,date:new Date().toLocaleString()});
-  localStorage.setItem("transactions",JSON.stringify(transactions));
-  renderTransactions(); popup.classList.remove("open");
-  document.getElementById("amount").value=""; document.getElementById("notes").value="";
-});
 
-// Delete
-function deleteTransaction(i){ transactions.splice(i,1); localStorage.setItem("transactions",JSON.stringify(transactions)); renderTransactions(); }
+  try {
+    await createTransaction({ amount, type: currentType, category, mode, notes });
+    await loadTransactions();
+    popup.classList.remove("open");
+    document.getElementById("amount").value=""; document.getElementById("notes").value="";
+  } catch(e){
+    errorMsg.textContent = e.message || "Failed to save";
+  }
+}); // [4][1]
 
-// Edit
-function editTransaction(i){
-  const tx=transactions[i]; currentType=tx.type;
+// ===== Delete =====
+async function handleDelete(id){
+  try {
+    await deleteTransactionById(id);
+    await loadTransactions();
+  } catch(e){
+    alert(e.message || "Failed to delete");
+  }
+} // [4][1]
+
+// ===== Edit Flow =====
+function startEdit(id){
+  const tx = transactions.find(t => t.id === id);
+  if(!tx) return;
+  currentType = tx.type;
   loadCategories(tx.type);
   document.getElementById("amount").value=tx.amount;
   document.getElementById("category").value=tx.category;
   document.getElementById("mode").value=tx.mode;
   document.getElementById("notes").value=tx.notes;
   popup.classList.add("open");
-  document.getElementById("save-transaction").onclick=()=>{
+  // override save to perform update
+  const saveBtn = document.getElementById("save-transaction");
+  saveBtn.onclick = async () => {
     const amt=parseInt(document.getElementById("amount").value);
     if(!amt){ errorMsg.textContent="⚠️ Please enter amount"; return;}
-    transactions[i]={amount:amt,type:currentType,category:document.getElementById("category").value,
-      mode:document.getElementById("mode").value,notes:document.getElementById("notes").value,
-      date:new Date().toLocaleString()};
-    localStorage.setItem("transactions",JSON.stringify(transactions));
-    renderTransactions(); popup.classList.remove("open");
-    resetSaveBtn(); 
+    try {
+      await updateTransaction(id, {
+        amount: amt,
+        type: currentType,
+        category: document.getElementById("category").value,
+        mode: document.getElementById("mode").value,
+        notes: document.getElementById("notes").value
+      });
+      await loadTransactions();
+      popup.classList.remove("open");
+      resetSaveBtn();
+    } catch(e){
+      errorMsg.textContent = e.message || "Failed to update";
+    }
   };
-}
-function resetSaveBtn(){ document.getElementById("save-transaction").onclick=()=>{ // reset to default save
-  const amount=parseInt(document.getElementById("amount").value);
-  if(!amount){ errorMsg.textContent="⚠️ Please enter amount"; return;}
-  transactions.push({amount,type:currentType,category:document.getElementById("category").value,
-    mode:document.getElementById("mode").value,notes:document.getElementById("notes").value,
-    date:new Date().toLocaleString()});
-  localStorage.setItem("transactions",JSON.stringify(transactions));
-  renderTransactions(); popup.classList.remove("open"); document.getElementById("amount").value="";
-  document.getElementById("notes").value="";};
-}
+} // [4][1]
+
+function resetSaveBtn(){
+  const saveBtn = document.getElementById("save-transaction");
+  saveBtn.onclick = async () => {
+    const amount=parseInt(document.getElementById("amount").value);
+    if(!amount){ errorMsg.textContent="⚠️ Please enter amount"; return;}
+    try {
+      await createTransaction({
+        amount,
+        type: currentType,
+        category: document.getElementById("category").value,
+        mode: document.getElementById("mode").value,
+        notes: document.getElementById("notes").value
+      });
+      await loadTransactions();
+      popup.classList.remove("open");
+      document.getElementById("amount").value="";
+      document.getElementById("notes").value="";
+    } catch(e){
+      errorMsg.textContent = e.message || "Failed to save";
+    }
+  };
+} // [4][1]
 resetSaveBtn();
 
-// Budget Save
-document.getElementById("add-budget").addEventListener("click",()=>{
+// ===== Budget Save =====
+document.getElementById("add-budget").addEventListener("click", async ()=>{
   const newB=parseInt(document.getElementById("budget-input").value);
-  if(newB && newB>0){budget=newB;localStorage.setItem("budget",budget);renderTransactions();}
-});
+  if(newB && newB>0){
+    try {
+      await saveBudget(newB);
+      // renderTransactions() happens in loadBudget
+    } catch(e){
+      alert(e.message || "Failed to set budget");
+    }
+  }
+}); // [1][4]
 
 // Welcome popup with countdown and close button
 const welcomePopup = document.getElementById("welcome-popup");
@@ -188,20 +302,10 @@ closeWelcomeBtn.addEventListener("click", hideWelcomePopup);
 // Automatically show popup on page load with smooth animation
 window.addEventListener("load", () => {
   setTimeout(() => startWelcomePopup(), 500); // delay for smooth UX
-});
-
-const marqueeContainer = document.getElementById("marquee-container");
-const closeMarqueeBtn = document.getElementById("close-marquee");
-
-closeMarqueeBtn.addEventListener("click", () => {
-  marqueeContainer.style.display = "none";
-});
-
-// Auto hide marquee after 30 seconds
-setTimeout(() => {
-  marqueeContainer.style.display = "none";
-}, 30000);
-
+  // Load server data on page load
+  loadBudget().catch(()=>{ /* fallback stays at default budget */ });
+  loadTransactions().catch(()=>{ /* fallback shows empty list */ });
+}); // [1][4]
 
 // Filters
 document.querySelectorAll(".filter").forEach(btn=>{
