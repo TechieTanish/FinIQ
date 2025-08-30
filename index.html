@@ -7,132 +7,142 @@
   <link rel="stylesheet" href="style.css" />
   <script defer src="script.js"></script>
 </head>
-<body>
+<body class="preload">
   <!-- Navbar -->
- <nav class="navbar">
-  <div class="logo-container">
-    <div class="logo-box">
-      <img src="Images/LOGO(FinQ).png" alt="FINQ Logo" class="logo-img" />
+  <nav class="navbar">
+    <div class="logo-container">
+      <div class="logo-box">
+        <img src="Images/LOGO(FinQ).png" alt="FINQ Logo" class="logo-img" />
+      </div>
+      <div class="logo-text">FINQ</div>
     </div>
-    <div class="logo-text">FINQ</div>
-  </div>
-  <div class="controls">
-    <select id="language-switch">
-      <option value="en">EN</option>
-      <option value="hi">हिंदी</option>
-    </select>
-    <button id="theme-toggle">🌙</button>
-    <button id="profile-btn">👤</button>
-  </div>
-</nav>
-
+    <div class="controls">
+      <select id="language-switch">
+        <option value="en">EN</option>
+        <option value="hi">हिंदी</option>
+      </select>
+      <button id="theme-toggle" aria-label="Toggle theme">🌙</button>
+      <button id="profile-btn" aria-label="Open profile">👤</button>
+    </div>
+  </nav>
 
   <!-- Greetings -->
   <section class="greeting-section">
     <img src="Images/Greetings.png" alt="Greetings" class="greeting-img">
   </section>
 
-  <!-- Profile Sidebar -->
-  <aside id="profile-sidebar" class="sidebar">
-    <h2>👤 My Profile</h2>
-    <div class="profile-card">
-      <img src="https://via.placeholder.com/80" alt="Profile" class="profile-pic">
-      <p><strong>Name:</strong> You</p>
-      <div class="budget-row">
-        <input type="number" id="budget-input" placeholder="Enter Monthly Budget (₹)">
-        <button id="add-budget">Set Budget</button>
-      </div>
-      <p id="budget-msg" class="budget-msg"></p>
-      <div class="settings">
-        <label>Font Size:
-          <select id="font-size">
-            <option value="small">Small</option>
-            <option value="medium" selected>Medium</option>
-            <option value="large">Large</option>
-          </select>
-        </label>
-      </div>
-      <button id="close-sidebar" class="close-btn">Close</button>
-    </div>
-  </aside>
-
   <!-- Dashboard -->
   <main class="dashboard">
-    <!-- Summary Cards -->
+    <!-- Stats Cards -->
     <h2 class="section-title">📌 Overview</h2>
     <section class="cards">
-      <div class="card income">
-        <h3>💰 Income</h3>
-        <p id="income-amount">₹0</p>
+      <div class="card income" id="card-income" tabindex="0" role="button" aria-label="Open Income details">
+        <h3>💰 Income This Month</h3>
+        <p class="value" id="income-month">₹0</p>
       </div>
-      <div class="card expense">
-        <h3>💸 Expense</h3>
-        <p id="expense-amount">₹0</p>
+      <div class="card expense" id="card-expense" tabindex="0" role="button" aria-label="Open Expense details">
+        <h3>💸 Expense This Month</h3>
+        <p class="value" id="expense-month">₹0</p>
       </div>
-      <div class="card budget">
-        <h3>🎯 Balance</h3>
-        <p id="budget-amount">₹0</p>
+      <div class="card budget" id="card-budget" tabindex="0" role="button" aria-label="Open Budget details">
+        <h3>🎯 Budget Remaining</h3>
+        <p class="value" id="budget-remaining">₹0</p>
       </div>
     </section>
 
     <!-- Budget Progress -->
     <section class="progress">
       <h2 class="section-title">📈 Budget Usage</h2>
-      <div class="progress-bar">
-        <div id="progress-fill"></div>
+      <div class="progress-meta">
+        <span id="progress-label">0% of ₹0 used</span>
       </div>
-      <p id="nudge">✨ Track your first transaction to see insights!</p>
+      <div class="progress-bar" aria-label="Budget usage">
+        <div id="progress-fill" aria-hidden="true"></div>
+      </div>
+      <p id="nudge">Start by adding a transaction to unlock insights.</p>
     </section>
 
     <!-- Action Cards -->
     <section class="action-cards">
-      <div class="action-card income-card" id="add-income">
+      <div class="action-card income-card" id="add-income" role="button" tabindex="0">
         <h3>➕ Add Income</h3>
       </div>
-      <div class="action-card expense-card" id="add-expense">
+      <div class="action-card expense-card" id="add-expense" role="button" tabindex="0">
         <h3>➖ Add Expense</h3>
       </div>
     </section>
 
     <!-- Filters -->
     <section class="filters">
-      <button class="filter active" data-type="all">All</button>
-      <button class="filter" data-type="income">Income</button>
-      <button class="filter" data-type="expense">Expense</button>
-      <button class="filter" data-type="food">Food</button>
-      <button class="filter" data-type="travel">Travel</button>
-      <button class="filter" data-type="rent">Rent</button>
-      <button class="filter" data-type="others">Others</button>
+      <div class="filter-row">
+        <div class="filter-chips">
+          <button class="filter active" data-type="all">All</button>
+          <button class="filter" data-type="income">Income</button>
+          <button class="filter" data-type="expense">Expense</button>
+          <button class="filter" data-type="food">Food</button>
+          <button class="filter" data-type="travel">Travel</button>
+          <button class="filter" data-type="rent">Rent</button>
+          <button class="filter" data-type="others">Others</button>
+        </div>
+        <div class="filter-dates">
+          <label>From <input type="date" id="from-date"></label>
+          <label>To <input type="date" id="to-date"></label>
+          <button id="reset-dates" class="mini-btn">Reset</button>
+        </div>
+      </div>
+      <div class="tz-note">Times shown in India Standard Time (IST).</div>
     </section>
 
-    <!-- Transactions -->
+    <!-- Transactions (Table) -->
     <section class="transactions">
       <h2 class="section-title">💬 Transactions</h2>
-      <div class="transaction-frame">
-        <ul id="transaction-list" class="empty">
-          <li class="empty-msg">👋 Welcome to FINQ! Start by adding a transaction ➕</li>
-        </ul>
+      <div class="transaction-frame table-wrap">
+        <div class="table-meta">
+          <span id="tx-count">0 items</span>
+        </div>
+        <table id="tx-table">
+          <thead>
+            <tr>
+              <th>Amount</th>
+              <th>Type</th>
+              <th>Category</th>
+              <th>Mode</th>
+              <th>Notes</th>
+              <th>Date & Time (IST)</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="tx-tbody"></tbody>
+        </table>
+        <div class="empty-msg hidden" id="empty-table">
+          No records yet. Use Add Income/Expense to get started.
+        </div>
       </div>
     </section>
   </main>
 
   <!-- Add Transaction Modal -->
-  <div id="transaction-popup" class="popup">
+  <div id="transaction-popup" class="popup" aria-hidden="true">
     <div class="popup-content">
       <h3 id="add-transaction-title">➕ Add Transaction</h3>
-      <p id="error-msg" class="error"></p>
-      <input type="number" id="amount" placeholder="Amount (₹)">
+      <p id="error-msg" class="error" role="alert"></p>
+
+      <input type="number" id="amount" placeholder="Amount (₹)" inputmode="numeric">
       <select id="category"></select>
       <select id="mode">
         <option value="cash">💵 Cash</option>
         <option value="upi">📱 UPI</option>
       </select>
       <input type="text" id="notes" placeholder="Notes (optional)">
+
       <div class="popup-actions">
         <button id="save-transaction">Save</button>
         <button id="close-popup">Cancel</button>
       </div>
     </div>
   </div>
+
+  <!-- Toasts -->
+  <div id="toast-container" aria-live="polite" aria-atomic="true"></div>
 </body>
 </html>

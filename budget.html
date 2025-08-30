@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FINQ • Budget</title>
+  <link rel="stylesheet" href="detail.css" />
+</head>
+<body class="preload" data-view="budget">
+  <div class="slider-wrap"><div class="slider-track"></div></div>
+  <div class="container">
+    <div class="topbar">
+      <button id="back-home" class="back">← Back</button>
+      <div class="title">Budget Overview</div>
+      <div></div>
+    </div>
+
+    <div class="grid">
+      <section class="cardy">
+        <div class="section-title">All Transactions</div>
+        <div class="table-wrap">
+          <div class="table-meta"><span>0 items</span></div>
+          <table>
+            <thead>
+              <tr><th>Amount</th><th>Type</th><th>Category</th><th>Mode</th><th>Notes</th><th>Date & Time (IST)</th><th></th></tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+
+      <aside class="cardy">
+        <div class="section-title">Budget Status</div>
+        <div class="stat"><span>Budget Remaining</span><strong id="sum-remaining"></strong></div>
+        <div class="stat"><span>Usage</span><strong id="budget-label">0% of ₹0 used</strong></div>
+        <div class="progress-bar"><div class="progress-fill"></div></div>
+      </aside>
+    </div>
+  </div>
+  <script defer src="detail.js"></script>
+</body>
+</html>

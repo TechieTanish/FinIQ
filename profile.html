@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FINQ • Profile</title>
+  <link rel="stylesheet" href="detail.css" />
+  <link rel="stylesheet" href="profile.css" />
+</head>
+<body class="preload" data-view="profile">
+  <div class="slider-wrap"><div class="slider-track"></div></div>
+
+  <div class="container">
+    <div class="topbar">
+      <button id="back-home" class="back">← Back</button>
+      <div class="title">User Profile</div>
+      <div></div>
+    </div>
+
+    <div class="grid">
+      <section class="cardy profile-card">
+        <div class="profile-head">
+          <img class="avatar" src="Images/profile/avatar.png" alt="Avatar" />
+          <div>
+            <h3 id="p-name">Tanish</h3>
+            <p class="muted">Cloud & DevOps learner</p>
+          </div>
+        </div>
+
+        <div class="profile-row">
+          <label>Display Name</label>
+          <input id="name-input" type="text" placeholder="Enter name" />
+        </div>
+
+        <div class="profile-row">
+          <label>Preferred Language</label>
+          <select id="lang-input">
+            <option value="en">English</option>
+            <option value="hi">हिंदी</option>
+          </select>
+        </div>
+
+        <div class="profile-row">
+          <label>Theme</label>
+          <div class="seg">
+            <button class="seg-btn" data-theme="light">Light</button>
+            <button class="seg-btn" data-theme="dark">Dark</button>
+          </div>
+        </div>
+
+        <div class="profile-row">
+          <label>Monthly Budget</label>
+          <input id="budget-input-prof" type="number" placeholder="₹" inputmode="numeric" />
+        </div>
+
+        <div class="profile-actions">
+          <button id="save-prof" class="primary">Save Changes</button>
+        </div>
+      </section>
+
+      <aside class="cardy">
+        <div class="section-title">Quick Stats</div>
+        <div class="stat"><span>Member Since</span><strong>2025</strong></div>
+        <div class="stat"><span>Total Transactions</span><strong id="prof-total">—</strong></div>
+      </aside>
+    </div>
+  </div>
+
+  <div id="toast-container"></div>
+  <script defer src="profile.js"></script>
+</body>
+</html>

@@ -1,97 +1,265 @@
-FINQ – Cash + UPI + Family Budget Tracker ------
+# FINQ – India's First Family-Centric Finance Management Platform 🚀
 
-🔹 Project Purpose
+*Building trust through transparency in family finance management*
 
-FINQ is a hyper-simple, secure, and Hindi-friendly finance assistant that helps users track their Cash + UPI expenses and family budgets with the ease of chatting.
+---
 
-🎯 Objectives
+## 🎯 **Project Vision**
 
-Simplify personal finance management for real users.
+FINQ transforms how Indian families manage money together through transparency, trust, and seamless collaboration. From joint family budgets to student event planning - making financial management inclusive, interactive, and secure.
 
-Support cash + UPI tracking (most apps ignore cash).
+**Mission Statement**: *"To simplify money management for Indian households with a secure, family-first Cash + UPI + Budget Tracker that builds trust through transparency, without complexity."*
 
-Enable family/group budgeting for households, roommates, or small teams.
+---
 
-Provide positive nudges instead of guilt when managing money.
+## 🔹 **Project Purpose**
 
-Ensure local language accessibility (Hindi-first, later multi-language).
+FINQ is a comprehensive, secure, and family-friendly finance platform that helps users:
+- Track Cash + UPI expenses seamlessly
+- Manage family budgets collaboratively  
+- Enable transparent financial communication
+- Build saving habits through positive motivation
+- Provide local language accessibility (Hindi-first)
 
-Deliver trusted security with local data storage & privacy.
+---
 
+## 💡 **Why FINQ? (Unique Value Proposition)**
 
-💡 Why FINQ? (Market Gaps It Fulfills)
+### **Market Gaps We Address:**
+✅ **Family-First Approach** → Unlike individual-focused apps, FINQ is built for families  
+✅ **Cash + UPI Hybrid Tracking** → Comprehensive expense management  
+✅ **Built-in Family Communication** → Chat features for financial discussions  
+✅ **Transparency Without Judgment** → Trust-building through visibility  
+✅ **Local Language Support** → Hindi-first interface for broader accessibility  
+✅ **WhatsApp-like Simplicity** → Familiar, intuitive user experience  
 
-✅ Cash + UPI Hybrid → Unlike other apps, FINQ tracks both seamlessly.
-✅ Family Budgets → Shared view for all family members.
-✅ Local Language Support → Hindi-first interface for Tier-2/3 India.
-✅ Positive & Motivational → Encourages saving habits with nudges.
-✅ WhatsApp-like Simplicity → Familiar, chat-style UX instead of complex reports.
+---
 
+## 🤝 **Target Audience**
 
-🤝 Who Can Use It?
+### **Primary Users:**
+- **Families** → Joint household budget management with transparency
+- **Students** → Event planning, hostel expenses, group fund management
+- **Small Communities** → Housing societies, friend groups, small teams
 
-Individuals → Track income & expenses easily.
+### **Use Cases:**
+- **Joint Family Budgets** → Parents and children tracking shared expenses
+- **Student Events** → Farewell parties, trips, group activities
+- **Roommate Expenses** → Flat rent, utilities, groceries split management
+- **Small Business** → Family shops tracking daily cash + UPI flows
 
-Families → Manage shared household budgets.
+---
 
-Students/Roommates → Split and manage hostel/flat expenses.
+## 🏗️ **Current Architecture**
 
-Small Shops/Businesses → Track daily cash + UPI flows without heavy tools.
+### **Backend (Express.js API)**
+```
+├── Health Check (/api/v1/health)
+├── Budget Management (/api/v1/budget)
+├── Transaction CRUD (/api/v1/transactions)
+└── CORS + JSON middleware
+```
 
+### **Frontend (Vanilla JavaScript)**
+```
+├── Responsive Dashboard UI
+├── Real-time Transaction Management
+├── Budget Progress Tracking
+├── Dark/Light Theme Toggle
+├── Category-wise Expense Filtering
+└── API Integration with Fetch
+```
 
-🛠️ Tech Stack (MVP Version)
+### **Current Tech Stack**
+- **Backend**: Node.js + Express.js
+- **Database**: In-memory (PostgreSQL planned)
+- **Frontend**: HTML5, CSS3, Vanilla JavaScript
+- **Development**: Nodemon, Git
+- **Hosting**: Local development (Railway/Render planned)
 
-Frontend: HTML, CSS, JavaScript
+---
 
-Design: Paper Sketch + Responsive
+## 🚀 **Development Roadmap**
 
-Storage: LocalStorage (Phase 1), Cloud DB in future
+### **✅ Phase 1: Foundation (COMPLETED)**
+- ✅ Basic transaction API with CRUD operations
+- ✅ Frontend-backend integration
+- ✅ Real-time budget tracking
+- ✅ Responsive UI with theme support
 
-Hosting: GitHub Pages / Netlify
+### **🔄 Phase 2: Authentication (IN PROGRESS)**
+- 🎯 User registration/login system
+- 🎯 Password security (bcrypt + JWT)
+- 🎯 Email verification workflow
+- 🎯 Responsive login/signup UI
 
+### **📋 Phase 3: Family Core (PLANNED)**
+- Family creation & invitation system
+- Role-based access (Admin/Member)
+- Shared budget management
+- Family member transaction visibility
 
->
-🚀 Roadmap
-Phase 1 – MVP (Current Goal)
+### **📋 Phase 4: Communication Hub (PLANNED)**
+- Real-time family chat integration
+- Transaction-linked discussions
+- File sharing for receipts
+- Push notifications
 
-Dashboard with income/expense summary
+### **📋 Phase 5: Advanced Features (PLANNED)**
+- Spending pattern analysis
+- Budget recommendations
+- Multiple family/group support
+- Mobile app development
 
-Add expense form (Cash/UPI + Category + Notes)
+*📋 [Detailed Roadmap](./ROADMAP.md) - Complete development timeline and strategy*
 
-LocalStorage data saving
+---
 
-Dark/Light theme
+## 🛠️ **Installation & Setup**
 
-Phase 2 – User Experience
+### **Prerequisites**
+- Node.js (v16+)
+- npm or yarn
+- Git
 
-Family member placeholder & notifications
+### **Quick Start**
+```bash
+# Clone the repository
+git clone https://github.com/yourusername/FINQ.git
+cd FINQ
 
-Budget limits & alerts
+# Install backend dependencies
+cd finq-backend
+npm install
 
-Hindi language toggle
+# Start development server
+npm run dev
 
-Phase 3 – Advanced Features
+# Server runs on http://localhost:8080
+# API endpoints available at http://localhost:8080/api/v1/
+```
 
-Analytics with charts
+### **API Endpoints**
+```
+GET    /api/v1/health           → Health check
+GET    /api/v1/budget           → Get current budget
+POST   /api/v1/budget           → Update budget
+GET    /api/v1/transactions     → List all transactions
+POST   /api/v1/transactions     → Create transaction
+PUT    /api/v1/transactions/:id → Update transaction
+DELETE /api/v1/transactions/:id → Delete transaction
+```
 
-Multi-user group budgets
+---
 
-Secure login & cloud sync
+## 📊 **Features Overview**
 
+### **Current Features (MVP)**
+- ✅ **Real-time Dashboard** → Income, expenses, budget progress
+- ✅ **Transaction Management** → Add, edit, delete with categories
+- ✅ **Budget Tracking** → Visual progress bars and limits
+- ✅ **Responsive Design** → Works on desktop and mobile
+- ✅ **Theme Support** → Dark/light mode toggle
+- ✅ **Category Filtering** → Filter by transaction type/category
+- ✅ **Local Storage Backup** → Fallback data persistence
 
+### **Upcoming Features**
+- 🔄 **User Authentication** → Secure login/signup
+- 📋 **Family Management** → Multi-user family accounts
+- 📋 **Real-time Chat** → Family financial discussions
+- 📋 **Advanced Analytics** → Spending insights and trends
+- 📋 **Mobile App** → Native iOS/Android applications
 
->>📌 Mission Statement
+---
 
-👉 “To simplify money management for Indian households and students with a secure, Hindi-friendly Cash + UPI + Family Budget Tracker 
-     that motivates users to save more, without stress.”
+## 🎨 **Design Philosophy**
 
-📢 Contributing
+### **User Experience Principles**
+- **Simplicity First** → WhatsApp-like ease of use
+- **Family-Centric** → Built for collaboration, not individual use
+- **Trust Through Transparency** → All family members see the same data
+- **Positive Motivation** → Encourage saving habits without guilt
+- **Cultural Sensitivity** → Hindi-first, Indian family values
 
-Ideas, feedback, and contributions are welcome! 🙌
-Feel free to open an issue or submit a pull request.
+### **Technical Principles**
+- **Security by Design** → Multi-layer data protection
+- **Scalability** → Built to handle growing families and communities
+- **Performance** → Fast loading, responsive interactions
+- **Accessibility** → Works across devices and language preferences
 
-📜 License
+---
 
-This project is licensed under the MIT License – feel free to use and improve it.
+## 🌟 **Screenshots**
 
-<img width="409" height="299" alt="{3F8677E3-A622-43BE-BC3E-E60C7F915E83}" src="https://github.com/user-attachments/assets/10e2e15c-222d-4497-9437-e34f745c8ed6" />
+### Dashboard Overview
+![FINQ Dashboard](https://github.com/user-attachments/assets/10e2e15c-222d-4497-9437-e34f745c8ed6)
+*Real-time family budget tracking with transparent expense visibility*
+
+---
+
+## 🤝 **Contributing**
+
+We welcome contributions from developers who believe in transparent family finance management!
+
+### **How to Contribute**
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+### **Contribution Areas**
+- 🔧 Backend API development
+- 🎨 UI/UX improvements
+- 📱 Mobile responsiveness
+- 🌐 Localization (Hindi, regional languages)
+- 🔒 Security enhancements
+- 📊 Analytics features
+
+---
+
+## 📈 **Project Stats**
+
+- **Current Version**: v1.0 (MVP)
+- **Development Phase**: Authentication System
+- **Target Launch**: Public Beta (Month 4)
+- **Market Focus**: Indian families, student communities
+- **Tech Stack**: Node.js + Express + Vanilla JS
+
+---
+
+## 🛡️ **Security & Privacy**
+
+- **Data Encryption**: All sensitive data encrypted at rest and in transit
+- **Authentication**: JWT-based secure session management
+- **Privacy First**: Family data isolated, no cross-family data access
+- **Local Control**: Option for local-first data storage
+- **Compliance**: GDPR-ready data handling practices
+
+---
+
+## 📞 **Support & Contact**
+
+- **Email**: tanish.vortex250@gmail.com
+- **LinkedIn**: www.linkedin.com/in/thetanish
+
+---
+
+## 📜 **License**
+
+This project is licensed under the MIT License.
+
+---
+
+## 🙏 **Acknowledgments**
+
+- **Family Finance Management** inspiration from real Indian household needs
+- **Open Source Community** for tools and frameworks
+- **Early Testers** providing valuable feedback and insights
+- **Indian Fintech Ecosystem** for market understanding
+
+---
+
+*"Great families manage money together. FINQ makes it simple, secure, and transparent."*
+
+**Built with ❤️ for Indian families by TANISH** 🚀

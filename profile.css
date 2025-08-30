@@ -1,0 +1,19 @@
+/* Extends detail.css glass look */
+.profile-card { display:flex; flex-direction:column; gap:14px; }
+.profile-head { display:flex; align-items:center; gap:12px; margin-bottom:6px; }
+.avatar { width:64px; height:64px; border-radius:50%; object-fit:cover; box-shadow:0 6px 20px rgba(0,0,0,.2); }
+.muted { opacity:.8; }
+
+.profile-row { display:grid; grid-template-columns: 180px 1fr; gap:12px; align-items:center; }
+.profile-row input, .profile-row select { padding:12px; border-radius:12px; border:1px solid #ccc; }
+
+.seg { display:flex; gap:8px; }
+.seg-btn { padding:10px 14px; border:none; border-radius:10px; cursor:pointer; background:#e3f2fd; }
+.seg-btn.active { background:#2196f3; color:#fff; }
+
+.profile-actions { display:flex; justify-content:flex-end; }
+.primary { padding:10px 16px; border:none; border-radius:10px; background:#4caf50; color:#fff; cursor:pointer; }
+
+@media (max-width: 700px) {
+  .profile-row { grid-template-columns: 1fr; }
+}
