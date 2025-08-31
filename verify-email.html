@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FINQ • Verify Email</title>
+  <style>
+    body {
+      min-height: 100vh;
+      margin: 0;
+      font-family: 'Poppins', Arial, sans-serif;
+      background: linear-gradient(135deg, #e3f5fb 0%, #90caf9 45%, #a3bffa 100%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+    .container {
+      background: rgba(255 255 255 / 0.3);
+      border-radius: 24px;
+      padding: 40px 32px;
+      box-shadow: 0 2px 32px rgb(75 112 190 / 0.25);
+      max-width: 400px;
+      width: 100%;
+      text-align: center;
+      user-select: none;
+      animation: fadeInUp 0.5s ease forwards;
+    }
+    h2 {
+      margin-top: 0;
+      margin-bottom: 16px;
+      font-weight: 800;
+      font-size: 2rem;
+      color: #184089;
+      text-shadow: 0 0 7px rgba(220, 237, 260, 0.5);
+    }
+    p {
+      margin: 12px 0 24px;
+      font-size: 1rem;
+      color: #395684cc;
+    }
+    .primary-btn {
+      position: relative;
+      overflow: hidden;
+      padding: 14px 0;
+      width: 100%;
+      background: linear-gradient(90deg, #1976d7 25%, #4cb3ff 90%);
+      color: white;
+      font-weight: 700;
+      font-size: 1.1rem;
+      border-radius: 22px;
+      border: none;
+      cursor: pointer;
+      user-select: none;
+      box-shadow: 0 4px 19px rgb(39 95 182 / 0.9);
+      transition: filter 0.3s ease;
+      outline: none;
+    }
+    .primary-btn:disabled {
+      cursor: not-allowed;
+      filter: brightness(0.7);
+    }
+    .primary-btn:focus-visible {
+      outline: 3px solid #4cb3ff;
+      outline-offset: 3px;
+    }
+    .ripple {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255 255 255 / 0.5);
+      transform: scale(0);
+      animation: ripple-effect 600ms linear;
+      pointer-events: none;
+    }
+    @keyframes ripple-effect {
+      to {
+        transform: scale(4);
+        opacity: 0;
+      }
+    }
+    .message {
+      margin-top: 20px;
+      font-weight: 600;
+      font-size: 1rem;
+      color: #184089;
+      min-height: 28px;
+      user-select: text;
+      white-space: pre-wrap;
+    }
+    .error {
+      color: #db2c2c;
+      font-weight: 700;
+    }
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Verify your email</h2>
+    <p>Please click the button below to verify your FINQ account email address.</p>
+    <button id="verifyBtn" class="primary-btn" disabled>Verify Email</button>
+    <div id="msg" class="message"></div>
+  </div>
+
+  <script>
+    const verifyBtn = document.getElementById('verifyBtn');
+    const msgDiv = document.getElementById('msg');
+
+    // Extract token from URL query parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get('token');
+
+    if (!token) {
+      msgDiv.textContent = 'Verification token missing in URL.';
+      msgDiv.classList.add('error');
+    } else {
+      verifyBtn.disabled = false;
+    }
+
+    // Ripple effect on button click
+    verifyBtn.addEventListener('click', function(e) {
+      const circle = document.createElement('span');
+      const diameter = Math.max(this.clientWidth, this.clientHeight);
+      const radius = diameter / 2;
+
+      circle.style.width = circle.style.height = diameter + 'px';
+      const rect = this.getBoundingClientRect();
+      circle.style.left = e.clientX - rect.left - radius + 'px';
+      circle.style.top = e.clientY - rect.top - radius + 'px';
+      circle.classList.add('ripple');
+
+      const ripple = this.querySelector('.ripple');
+      if (ripple) ripple.remove();
+
+      this.appendChild(circle);
+    });
+
+    // Verify email button click handler
+    verifyBtn.addEventListener('click', async () => {
+      verifyBtn.disabled = true;
+      msgDiv.textContent = 'Verifying...';
+      msgDiv.classList.remove('error');
+
+      try {
+        const res = await fetch('/api/v1/auth/verify-email', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ token }),
+        });
+        const data = await res.json();
+
+        if (res.ok) {
+          msgDiv.textContent = data.message + '\nYou can now login.';
+          verifyBtn.style.display = 'none';
+          setTimeout(() => {
+            window.location.href = 'login.html';
+          }, 3000);
+        } else {
+          msgDiv.textContent = data.message || 'Verification failed.';
+          msgDiv.classList.add('error');
+          verifyBtn.disabled = false;
+        }
+      } catch (err) {
+        msgDiv.textContent = 'Network error, please try again later.';
+        msgDiv.classList.add('error');
+        verifyBtn.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>

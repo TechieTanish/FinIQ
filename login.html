@@ -319,26 +319,7 @@
   </div>
 
 <script>
-  // Fetch and cycle login images from Unsplash
-  async function setLoginImage() {
-    const UNSPLASH_ACCESS_KEY = 'YOUR_ACCESS_KEY_HERE'; // Replace with your key
-    const queries = ['business dashboard', 'minimal finance', 'secure login', 'data privacy'];
-    const chosen = queries[Math.floor(Math.random() * queries.length)];
-    try {
-      const url = `https://api.unsplash.com/photos/random?query=${encodeURIComponent(chosen)}&orientation=landscape&client_id=${UNSPLASH_ACCESS_KEY}`;
-      const response = await fetch(url);
-      const data = await response.json();
-      document.getElementById('limg').src = data.urls.regular;
-      document.getElementById('lcap').textContent = data.alt_description || chosen;
-    } catch {
-      // fallback static image
-      document.getElementById('limg').src = 'https://images.unsplash.com/photo-1461749280684-dccba630f6?auto=format&fit=crop&w=800';
-      document.getElementById('lcap').textContent = chosen;
-    }
-  }
-  setLoginImage();
-
-  // Toggle password visibility without style changes
+  // Toggle password visibility
   function togglePw(id, btn) {
     const input = document.getElementById(id);
     if (input.type === 'password') {
@@ -350,7 +331,6 @@
     }
   }
 
-  // Enable login button only if both email and password are filled
   const emailInput = document.getElementById('lemail');
   const passwordInput = document.getElementById('lpass');
   const loginBtn = document.getElementById('logBtn');
@@ -367,7 +347,7 @@
   emailInput.addEventListener('input', validateInputs);
   passwordInput.addEventListener('input', validateInputs);
 
-  // Show error if login clicked without filling fields
+  // Form submit handler
   document.getElementById('loginForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     errorMsg.textContent = '';
@@ -417,7 +397,6 @@
     const circle = document.createElement('span');
     const diameter = Math.max(button.clientWidth, button.clientHeight);
     const radius = diameter / 2;
-
     circle.style.width = circle.style.height = diameter + 'px';
     circle.style.left = event.clientX - button.getBoundingClientRect().left - radius + 'px';
     circle.style.top = event.clientY - button.getBoundingClientRect().top - radius + 'px';
@@ -432,8 +411,12 @@
     btn.addEventListener('click', createRipple);
   });
 
-  // OAuth button alerts
-  document.getElementById('googleLog').onclick = () => alert('Google Sign-In coming soon!');
+  // Google Login button redirects to backend OAuth flow
+  document.getElementById('googleLog').onclick = () => {
+    window.location.href = '/api/v1/auth/google';
+  };
+
+  // Apple login placeholder
   document.getElementById('appleLog').onclick = () => alert('Apple Sign-In coming soon!');
 </script>
 </body>

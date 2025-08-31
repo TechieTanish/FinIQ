@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>FINQ • Sign Up</title>
   <script src="https://www.google.com/recaptcha/api.js" async defer></script>
   <style>
@@ -25,6 +25,8 @@
       backdrop-filter: blur(24px);
       max-width: 900px;
       width: 100%;
+      flex-wrap: wrap;
+      justify-content: center;
     }
     .form-card,
     .slider-card {
@@ -80,6 +82,7 @@
       margin-left: -32px;
       cursor: pointer;
       font-size: 1.05em;
+      user-select: none;
     }
     .form-actions {
       display: flex;
@@ -87,6 +90,8 @@
       gap: 10px;
     }
     .primary-btn {
+      position: relative;
+      overflow: hidden;
       padding: 13px 0;
       background: linear-gradient(90deg, #1976d2 20%, #42a5f5 80%);
       color: #fff;
@@ -95,16 +100,39 @@
       border-radius: 16px;
       font-weight: 600;
       cursor: pointer;
+      user-select: none;
+      box-shadow: 0 4px 19px rgba(25, 118, 210, 0.9);
+      transition: filter 0.3s ease;
+      outline: none;
     }
     .primary-btn:disabled {
       opacity: 0.6;
       cursor: not-allowed;
+    }
+    .primary-btn:focus-visible {
+      outline: 3px solid #4cb3ff;
+      outline-offset: 3px;
+    }
+    .ripple {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255 255 255 / 0.5);
+      transform: scale(0);
+      animation: ripple-effect 600ms linear;
+      pointer-events: none;
+    }
+    @keyframes ripple-effect {
+      to {
+        transform: scale(4);
+        opacity: 0;
+      }
     }
     .or-sep {
       text-align: center;
       color: #7c8ca2;
       font-size: 0.98rem;
       margin: 8px 0;
+      user-select: none;
     }
     .oauth-btn {
       display: flex;
@@ -116,23 +144,37 @@
       border: none;
       border-radius: 15px;
       background: #fff;
-      box-shadow: 0 1.5px 8px #1976d215;
+      box-shadow: 0 1.5px 8px rgba(25, 118, 210, 0.2);
       color: #26315b;
       cursor: pointer;
       font-weight: 500;
+      user-select: none;
+      transition: box-shadow 0.2s ease;
+      position: relative;
+      overflow: hidden;
+      outline: none;
+    }
+    .oauth-btn:hover {
+      box-shadow: 0 0 20px rgba(17, 67, 157, 0.8);
     }
     .oauth-btn img {
       height: 21px;
+      user-select: none;
     }
     .footer-links {
       margin-top: 13px;
       text-align: center;
       font-size: 0.95em;
+      user-select: none;
     }
     .footer-links a {
       color: #2464e2;
       text-decoration: none;
       font-weight: 600;
+    }
+    .footer-links a:hover,
+    .footer-links a:focus {
+      text-decoration: underline;
     }
     .g-recaptcha {
       margin: 10px 0;
@@ -143,6 +185,8 @@
       text-align: center;
       min-height: 26px;
       font-size: 0.97em;
+      user-select: text;
+      white-space: pre-wrap;
     }
     .slider-card {
       flex: 1.1 1 0;
@@ -198,11 +242,10 @@
     }
   </style>
 </head>
-
 <body>
   <div class="auth-flex pagefade">
     <!-- FORM -->
-    <form class="form-card" id="signupForm" autocomplete="on" tabindex="1">
+    <form class="form-card" id="signupForm" autocomplete="on" tabindex="1" novalidate>
       <h2>Sign Up to FINQ</h2>
       <p>
         Already have an account? <a href="login.html" class="footer-links">Login here</a>
@@ -251,9 +294,9 @@
           <button type="button" class="toggle" tabindex="-1" onclick="togglePw('spass2', this)">👁️</button>
         </div>
       </div>
-      <div class="g-recaptcha" data-sitekey="YOUR_SITE_KEY"></div>
+      <div class="g-recaptcha" data-sitekey="6LeN77grAAAAAEtlkWFhwBVLOaNuqLjGgO1JAWlu"></div>
       <div class="form-actions" id="finalActions" hidden>
-        <button class="primary-btn" type="submit" id="signBtn">Sign Up to FINQ</button>
+        <button class="primary-btn" type="submit" id="signBtn" disabled>Sign Up to FINQ</button>
         <div class="or-sep">or continue with</div>
         <button class="oauth-btn" type="button" id="googleSign">
           <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" />
@@ -276,109 +319,159 @@
     </div>
   </div>
 
-  <script>
-    // Live Unsplash fetch (signup)
-    async function setSignupImage() {
-      const UNSPLASH = "YOUR_UNSPLASH_ACCESS_KEY";
-      const queries = ["family finance", "money management", "teamwork saving", "budget planning"];
-      const chosen = queries[Math.floor(Math.random() * queries.length)];
-      const url = `https://api.unsplash.com/photos/random/?query=${encodeURIComponent(
-        chosen
-      )}&orientation=landscape&client_id=${UNSPLASH}`;
-      const img = document.getElementById("simg");
-      const cap = document.getElementById("scap");
-      try {
-        const res = await fetch(url);
-        const data = await res.json();
-        img.src = data.urls.regular;
-        cap.textContent = data.alt_description || data.description || chosen;
-      } catch {
-        img.src =
-          "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=800&q=80";
-        cap.textContent = chosen;
-      }
+<script>
+  // Toggle password visibility
+  function togglePw(id, btn) {
+    const input = document.getElementById(id);
+    input.type = input.type === "password" ? "text" : "password";
+    btn.textContent = input.type === "password" ? "👁️" : "🙈";
+  }
+
+  // Elements and variables
+  const emailInput = document.getElementById("semail");
+  const requestOtpBtn = document.getElementById("requestOtpBtn");
+  const otpStage = document.getElementById("otpStage");
+  const otpInput = document.getElementById("sotp");
+  const verifyOtpBtn = document.getElementById("verifyOtpBtn");
+  const passwordStage = document.getElementById("passwordStage");
+  const finalActions = document.getElementById("finalActions");
+  const signBtn = document.getElementById("signBtn");
+  const errorMsg = document.getElementById("serr");
+
+  // Validate email and enable Request OTP
+  emailInput.addEventListener("input", () => {
+    const validMail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput.value);
+    requestOtpBtn.disabled = !validMail;
+    errorMsg.textContent = validMail ? "" : "Enter a valid email address.";
+  });
+
+  // Request OTP click handler - calls backend signup API with reCAPTCHA token
+  requestOtpBtn.onclick = async () => {
+    errorMsg.textContent = "";
+    const recaptchaToken = grecaptcha.getResponse();
+    if (!recaptchaToken) {
+      errorMsg.textContent = "Please complete the CAPTCHA.";
+      return;
     }
-    setSignupImage();
+    requestOtpBtn.disabled = true;
 
-    // Toggle password
-    function togglePw(id, btn) {
-      const input = document.getElementById(id);
-      input.type = input.type === "password" ? "text" : "password";
-      btn.textContent = input.type === "password" ? "👁️" : "🙈";
+    try {
+      const response = await fetch('/api/v1/auth/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: emailInput.value.trim(),
+          password: 'dummy', // OTP requested before password, so dummy here
+          recaptchaToken,
+        }),
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.message || 'Signup failed.');
+
+      otpStage.classList.remove("hidden");
+      document.getElementById("emailStage").classList.add("hidden");
+      otpInput.focus();
+    } catch (err) {
+      errorMsg.textContent = err.message;
+    } finally {
+      requestOtpBtn.disabled = false;
+      grecaptcha.reset();
+    }
+  };
+
+  // OTP input validation
+  otpInput.addEventListener("input", () => {
+    verifyOtpBtn.disabled = otpInput.value.length !== 6 || !/^\d{6}$/.test(otpInput.value);
+    errorMsg.textContent = "";
+  });
+
+  // Verify OTP click handler - simulate OTP check, then show password stage
+  verifyOtpBtn.onclick = () => {
+    errorMsg.textContent = "";
+    if (otpInput.value === "123456") { // You may integrate real OTP verification backend API here
+      otpStage.classList.add("hidden");
+      passwordStage.classList.remove("hidden");
+      finalActions.hidden = false;
+      signBtn.disabled = true;
+      document.getElementById("spass").focus();
+    } else {
+      errorMsg.textContent = "Invalid OTP. Please try again.";
+    }
+  };
+
+  // Password and Confirm Password validation to enable signup button
+  function checkPasswords() {
+    const pass = document.getElementById("spass").value;
+    const pass2 = document.getElementById("spass2").value;
+    signBtn.disabled = !pass || !pass2 || pass.length < 6 || pass !== pass2;
+    errorMsg.textContent = (pass && pass2 && pass !== pass2) ? "Passwords do not match." : "";
+  }
+  document.getElementById("spass").addEventListener("input", checkPasswords);
+  document.getElementById("spass2").addEventListener("input", checkPasswords);
+
+  // Signup submit handler
+  document.getElementById("signupForm").onsubmit = async (e) => {
+    e.preventDefault();
+    errorMsg.textContent = "";
+    signBtn.disabled = true;
+
+    const email = emailInput.value.trim();
+    const password = document.getElementById("spass").value;
+    const recaptchaToken = grecaptcha.getResponse();
+
+    if (!recaptchaToken) {
+      errorMsg.textContent = "Please complete the CAPTCHA.";
+      signBtn.disabled = false;
+      return;
     }
 
-    // Email validation & OTP flow (mocked backend)
-    const emailInput = document.getElementById("semail");
-    const requestOtpBtn = document.getElementById("requestOtpBtn");
-    const otpStage = document.getElementById("otpStage");
-    const otpInput = document.getElementById("sotp");
-    const verifyOtpBtn = document.getElementById("verifyOtpBtn");
-    const passwordStage = document.getElementById("passwordStage");
-    const finalActions = document.getElementById("finalActions");
-    const errorMsg = document.getElementById("serr");
+    try {
+      const response = await fetch('/api/v1/auth/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password, recaptchaToken }),
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.message || 'Signup failed.');
 
-    emailInput.addEventListener("input", () => {
-      const validMail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput.value);
-      requestOtpBtn.disabled = !validMail;
-      errorMsg.textContent = validMail ? "" : "Enter a valid email address.";
-    });
+      errorMsg.style.color = "#184089";
+      errorMsg.textContent = "Signup successful! Please check your email to verify your account.";
 
-    requestOtpBtn.onclick = () => {
-      errorMsg.textContent = "";
-      // Simulate sending OTP
       requestOtpBtn.disabled = true;
-      setTimeout(() => {
-        otpStage.classList.remove("hidden");
-        document.getElementById("emailStage").classList.add("hidden");
-        otpInput.focus();
-      }, 800);
-    };
+      verifyOtpBtn.disabled = true;
+      signBtn.disabled = true;
+    } catch (err) {
+      errorMsg.style.color = "#e53935";
+      errorMsg.textContent = err.message;
+      signBtn.disabled = false;
+      grecaptcha.reset();
+    }
+  };
 
-    otpInput.addEventListener("input", () => {
-      verifyOtpBtn.disabled = otpInput.value.length !== 6 || !/^\d{6}$/.test(otpInput.value);
-      errorMsg.textContent = "";
-    });
+  // Ripple effect on buttons
+  function createRipple(event) {
+    const button = event.currentTarget;
+    const circle = document.createElement("span");
+    const diameter = Math.max(button.clientWidth, button.clientHeight);
+    const radius = diameter / 2;
+    circle.style.width = circle.style.height = diameter + "px";
+    circle.style.left = event.clientX - button.getBoundingClientRect().left - radius + "px";
+    circle.style.top = event.clientY - button.getBoundingClientRect().top - radius + "px";
+    circle.classList.add("ripple");
+    const ripple = button.getElementsByClassName("ripple")[0];
+    if (ripple) ripple.remove();
+    button.appendChild(circle);
+  }
+  document.querySelectorAll(".primary-btn, .oauth-btn").forEach(btn => {
+    btn.addEventListener("click", createRipple);
+  });
 
-    verifyOtpBtn.onclick = () => {
-      errorMsg.textContent = "";
-      // Simulate OTP check (accept 123456)
-      if (otpInput.value === "123456") {
-        otpStage.classList.add("hidden");
-        passwordStage.classList.remove("hidden");
-        finalActions.hidden = false;
-      } else {
-        errorMsg.textContent = "Invalid OTP. Please try again.";
-      }
-    };
-
-    // Signup submit
-    document.getElementById("signupForm").onsubmit = (e) => {
-      e.preventDefault();
-      if (document.getElementById("notrobot") && !document.getElementById("notrobot").checked) {
-        errorMsg.textContent = "Please confirm you're not a robot.";
-        return;
-      }
-      const pass = document.getElementById("spass").value;
-      const pass2 = document.getElementById("spass2").value;
-      if (pass !== pass2) {
-        errorMsg.textContent = "Passwords do not match.";
-        return;
-      }
-      if (pass.length < 6) {
-        errorMsg.textContent = "Password must be at least 6 characters.";
-        return;
-      }
-      errorMsg.textContent = "";
-      document.getElementById("signBtn").disabled = true;
-      // Simulate signup API call
-      setTimeout(() => {
-        window.location.href = "dashboard.html";
-      }, 1000);
-    };
-
-    // Social signin alert placeholders
-    document.getElementById("googleSign").onclick = () => alert("Google signup coming soon!");
-    document.getElementById("appleSign").onclick = () => alert("Apple signup coming soon!");
-  </script>
+  // Google OAuth button redirects for signup
+  document.getElementById("googleSign").onclick = () => {
+    window.location.href = '/api/v1/auth/google';
+  };
+  // Apple OAuth placeholder
+  document.getElementById("appleSign").onclick = () => alert("Apple signup coming soon!");
+</script>
 </body>
 </html>
