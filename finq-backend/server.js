@@ -1,68 +1,74 @@
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+// Use dynamic import for node-fetch ESM package
+const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
+
 const app = express();
 
-// 1) Global middleware
-app.use(cors());                // allow frontend to call the API [2]
-app.use(express.json());        // parse JSON request bodies [5]
+// Use your actual keys here or via environment variables for production
+const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret';
+const RECAPTCHA_SECRET = process.env.RECAPTCHA_SECRET || '6LeN77grAAAAAIpV8VeQELxJz_7oNuWGVkjgGRsl';
 
-// 2) In-memory data
-let transactions = [];          // [{id, amount, type, category, mode, notes, date}] [5]
-let budget = 10000;             // default monthly budget [5]
+// Global middleware
+app.use(cors());
+app.use(express.json());
 
-// 3) Health check
-app.get('/api/v1/health', (req, res) => res.json({ status: 'ok' })); // [1]
+// In-memory simulation of DB - replace with a real DB in production
+const users = [
+  { id: '1', email: 'admin@finq.com', passwordHash: bcrypt.hashSync('finq123', 10), verified: true },
+];
 
-// 4) Budget routes
-app.get('/api/v1/budget', (req, res) => res.json({ budget }));       // [5]
-app.post('/api/v1/budget', (req, res) => {                           // [5]
-  const { budget: b } = req.body;
-  if (!b || b <= 0) return res.status(400).json({ error: 'Invalid budget' });
-  budget = b;
-  res.json({ budget });
+const familyMembers = [
+  { userId: '1', familyId: 'fam1', role: 'admin' },
+];
+
+// Health check endpoint
+app.get('/api/v1/health', (req, res) => res.json({ status: 'ok' }));
+
+// Verify Google reCAPTCHA token helper
+async function verifyRecaptcha(token) {
+  const response = await fetch(
+    `https://www.google.com/recaptcha/api/siteverify?secret=${RECAPTCHA_SECRET}&response=${token}`,
+    { method: 'POST' }
+  );
+  const data = await response.json();
+  return data.success;
+}
+
+// Login API
+app.post('/api/v1/auth/login', async (req, res) => {
+  const { email, password, recaptchaToken } = req.body;
+  if (!email || !password || !recaptchaToken) {
+    return res.status(400).json({ message: 'Missing required fields' });
+  }
+
+  const captchaOk = await verifyRecaptcha(recaptchaToken);
+  if (!captchaOk) return res.status(400).json({ message: 'Captcha validation failed' });
+
+  const user = users.find(u => u.email.toLowerCase() === email.toLowerCase());
+  if (!user) return res.status(401).json({ message: 'Invalid email or password' });
+
+  const match = await bcrypt.compare(password, user.passwordHash);
+  if (!match) return res.status(401).json({ message: 'Invalid email or password' });
+
+  const token = jwt.sign({ sub: user.id, email: user.email }, JWT_SECRET, { expiresIn: '15m' });
+  const hasFamily = familyMembers.some(m => m.userId === user.id);
+
+  res.json({
+    user: { id: user.id, email: user.email },
+    accessToken: token,
+    hasFamily,
+  });
 });
 
-// 5) Transaction routes
-app.get('/api/v1/transactions', (req, res) => res.json(transactions)); // [5]
-app.post('/api/v1/transactions', (req, res) => {                        // [5]
-  const { amount, type, category, mode, notes } = req.body;
-  if (!amount || !type) return res.status(400).json({ error: 'amount and type required' });
-  const tx = {
-    id: Date.now().toString(),
-    amount,
-    type, category, mode, notes,
-    date: new Date().toISOString()
-  };
-  transactions.push(tx);
-  res.status(201).json(tx);
-});
-app.put('/api/v1/transactions/:id', (req, res) => {                     // [5]
-  const { id } = req.params;
-  const i = transactions.findIndex(t => t.id === id);
-  if (i === -1) return res.status(404).json({ error: 'Not found' });
-  transactions[i] = { ...transactions[i], ...req.body, id };
-  res.json(transactions[i]);
-});
-app.delete('/api/v1/transactions/:id', (req, res) => {                  // [5]
-  const { id } = req.params;
-  const i = transactions.findIndex(t => t.id === id);
-  if (i === -1) return res.status(404).json({ error: 'Not found' });
-  const removed = transactions.splice(i, 1); // return a single object [5]
-  res.json(removed);
-});
-
-// 6) Root route (simple text)
+// Serve static frontend files
+app.use(express.static(path.join(__dirname, '..')));
 app.get('/', (req, res) => {
-  res.send('FINQ API is running');
-}); // [6]
-
-// 7) OPTIONAL: Serve the frontend via Express (Index.html at FINIQ root)
-app.use(express.static(path.join(__dirname, '..')));                    // static assets [2]
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, '..', 'Index.html'));              // dashboard page [7]
+  res.sendFile(path.join(__dirname, '..', 'Index.html'));
 });
 
-// 8) Start server
 const PORT = process.env.PORT || 8080;
-app.listen(PORT, () => console.log('API running on', PORT));
+app.listen(PORT, () => console.log(`API running on port ${PORT}`));

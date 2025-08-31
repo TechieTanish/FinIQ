@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FINQ Help</title>
+  <style>
+    body {
+      min-height: 100vh;
+      margin: 0;
+      font-family: 'Poppins', Arial, sans-serif;
+      background: linear-gradient(135deg, #e3f5fb 0%, #dbefff 70%, #c7dbff 100%);
+      display: flex;
+      justify-content: center;
+      padding: 20px;
+    }
+    .help-container {
+      max-width: 900px;
+      width: 100%;
+      background: rgba(255 255 255 / 0.18);
+      border-radius: 20px;
+      box-shadow: 0 0 40px rgb(75 112 190 / 0.2);
+      backdrop-filter: blur(28px);
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 2.2fr 1.5fr;
+      gap: 24px;
+      padding: 28px 30px;
+    }
+    .help-main {
+      color: #184089;
+      overflow-y: auto;
+      max-height: 85vh;
+      padding-right: 12px;
+    }
+    .help-main h1,
+    .help-main h2,
+    .help-main h3 {
+      margin-top: 0;
+    }
+    .help-main h1 {
+      font-weight: 800;
+      font-size: 2.7rem;
+      margin-bottom: 18px;
+      text-align: center;
+      text-shadow: 0 0 12px #c1d8ffcc;
+    }
+    .help-main h2 {
+      color: #2464e8;
+      border-bottom: 2px solid #91b1fbcc;
+      margin-bottom: 12px;
+      margin-top: 24px;
+    }
+    .help-main p {
+      font-size: 1.1rem;
+      line-height: 1.55;
+      margin-bottom: 12px;
+    }
+    ul {
+      margin-top: 0;
+      padding-left: 20px;
+    }
+    ul li {
+      margin-bottom: 9px;
+    }
+    a {
+      color: #247edd;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    a:hover,
+    a:focus {
+      text-decoration: underline;
+    }
+    .help-slider {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      padding-top: 8px;
+    }
+    .slide-img {
+      width: 100%;
+      height: 170px;
+      border-radius: 14px;
+      object-fit: cover;
+      box-shadow: 0 0 20px #aad3ff9e;
+      transform-style: preserve-3d;
+      perspective: 700px;
+      transition: transform 0.6s ease, filter 0.5s ease;
+    }
+    .slide-caption {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #184089;
+      text-align: center;
+      user-select: none;
+      filter: drop-shadow(0 0 4px #bad1ffae);
+    }
+    .btn-group {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      margin-top: 20px;
+      user-select: none;
+    }
+    .btn {
+      padding: 12px 24px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      border: none;
+      border-radius: 22px;
+      cursor: pointer;
+      background: linear-gradient(90deg, #1976d7 25%, #4cb3ff 90%);
+      color: white;
+      box-shadow: 0 4px 12px rgb(39 95 182 / 0.8);
+      transition: filter 0.3s ease;
+    }
+    .btn:hover {
+      filter: brightness(1.1);
+    }
+    .btn:focus-visible {
+      outline: 3px solid #4cb3ff;
+      outline-offset: 3px;
+    }
+    @media (max-width: 850px) {
+      .help-container {
+        grid-template-columns: 1fr;
+        padding: 18px 15px;
+        max-height: 90vh;
+      }
+      .help-main {
+        max-height: none;
+        padding-right: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="help-container">
+    <main class="help-main">
+      <h1>Welcome to FINQ Help & Support</h1>
+      <p>
+        FINQ helps simplify your family financial management with transparency and ease. Here you get handy guides to make the most of your experience.
+      </p>
+      <h2>Account Setup &amp; Security</h2>
+      <p>
+        - Maintaining strong passwords and enabling verification helps keep your data safe.<br />
+        - Forgot password? Use the recovery option on login to securely reset your credentials.
+      </p>
+      <h2>Family &amp; Members Management</h2>
+      <p>
+        - Create or join a family group easily.<br />
+        - Add members by invite email; roles can be managed by the head of the family.
+      </p>
+      <h2>Building Financial Transparency</h2>
+      <p>
+        - Track income and expenses individually or as a family.<br />
+        - See shared progress on budgets with clear visualization and alerts.
+      </p>
+      <h2>Chat &amp; Collaboration</h2>
+      <p>
+        - Use the built-in chat to discuss transactions securely with your family.<br />
+        - Share notes, receipts, and stay informed real-time.
+      </p>
+      <h2>Contact &amp; Support</h2>
+      <p>
+        For any assistance beyond this guide, please contact our support team via <a href="mailto:support@finqapp.com">support@finqapp.com</a>.
+      </p>
+
+      <div class="btn-group">
+        <button class="btn" id="goLoginBtn">Login</button>
+        <button class="btn" id="goSignupBtn">Sign Up</button>
+      </div>
+    </main>
+    <aside class="help-slider">
+      <img class="slide-img" src="https://source.unsplash.com/featured/?family,budget" alt="Family budgeting" />
+      <img class="slide-img" src="https://source.unsplash.com/featured/?financial,planning" alt="Financial planning" />
+      <img class="slide-img" src="https://source.unsplash.com/featured/?money,finance" alt="Money finance" />
+      <img class="slide-img" src="https://source.unsplash.com/featured/?teamwork,discussion" alt="Team discussion" />
+      <div class="slide-caption">Your trust is our top priority</div>
+    </aside>
+  </div>
+
+  <script>
+    document.getElementById('goLoginBtn').addEventListener('click', () => {
+      const body = document.body;
+      body.style.transition = 'opacity 0.5s ease-in-out';
+      body.style.opacity = 0;
+      setTimeout(() => {
+        window.location.href = 'login.html';
+      }, 500);
+    });
+
+    document.getElementById('goSignupBtn').addEventListener('click', () => {
+      const body = document.body;
+      body.style.transition = 'opacity 0.5s ease-in-out';
+      body.style.opacity = 0;
+      setTimeout(() => {
+        window.location.href = 'signup.html';
+      }, 500);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>FINQ • Forgot Password</title>
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+  <style>
+    body {
+      min-height: 100vh;
+      margin: 0;
+      font-family: 'Poppins', Arial, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #e3f2fd 0%, #90caf9 45%, #d1c4e9 100%);
+      overflow-x: hidden;
+    }
+    .forgot-flex {
+      display: flex;
+      gap: 36px;
+      background: rgba(255, 255, 255, 0.13);
+      box-shadow: 0 0 32px rgba(0, 0, 0, 0.11);
+      border-radius: 36px;
+      padding: 45px 35px;
+      backdrop-filter: blur(24px);
+      max-width: 900px;
+      width: 100%;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .form-card,
+    .slider-card {
+      border-radius: 24px;
+      box-shadow: 0 0 32px #1976d2aa;
+      background: rgba(255, 255, 255, 0.28);
+      display: flex;
+      flex-direction: column;
+      min-width: 340px;
+      padding: 40px 32px;
+      flex: 1 1 320px;
+      justify-content: center;
+    }
+    .form-card h2 {
+      font-size: 2rem;
+      margin-bottom: 8px;
+      text-align: center;
+      color: #184089;
+    }
+    .form-card p {
+      margin: 0 0 20px 0;
+      text-align: center;
+    }
+    .form-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .form-grid input {
+      padding: 11px;
+      font-size: 1rem;
+      border-radius: 13px;
+      border: 1.6px solid #90caf9;
+      background: rgba(255, 255, 255, 0.33);
+      outline: none;
+    }
+    .form-grid input:focus {
+      border: 2px solid #1976d2;
+    }
+    .btn-group {
+      margin-top: 12px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+      user-select: none;
+    }
+    .btn-group button {
+      flex: 1 1 100%;
+      padding: 13px 0;
+      border-radius: 16px;
+      font-weight: 600;
+      font-size: 1rem;
+      border: none;
+      cursor: pointer;
+      background: linear-gradient(90deg, #1976d2 20%, #42a5f5 80%);
+      color: #fff;
+      transition: background 0.25s ease;
+    }
+    .btn-group button:disabled {
+      background: #aaa;
+      cursor: not-allowed;
+    }
+    .hidden {
+      display: none;
+    }
+    .otp-input {
+      letter-spacing: 12px;
+      font-size: 2.5rem;
+      text-align: center;
+      font-weight: 600;
+      padding-bottom: 8px;
+    }
+    .error-msg {
+      color: #e53935;
+      font-size: 0.95rem;
+      text-align: center;
+      min-height: 28px;
+      margin: 9px 0;
+    }
+    .slider-card {
+      flex: 1.1 1 0;
+      justify-content: center;
+      align-items: center;
+      min-width: 340px;
+      min-height: 330px;
+      background: rgba(242, 245, 255, 0.46);
+    }
+    .slider-img {
+      width: 88%;
+      height: 260px;
+      object-fit: cover;
+      border-radius: 19px;
+      box-shadow: 0 5px 21px #9bb6ff3d;
+      transition: opacity 0.6s;
+    }
+    .slider-caption {
+      font-weight: 600;
+      color: #264084;
+      font-size: 1rem;
+      text-align: center;
+      margin-top: 18px;
+      letter-spacing: 0.06em;
+    }
+    @media (max-width: 850px) {
+      .forgot-flex {
+        flex-direction: column;
+        gap: 22px;
+        padding: 6px 4vw;
+      }
+      .form-card,
+      .slider-card {
+        min-width: 260px;
+        width: 100%;
+      }
+      .slider-img {
+        height: 175px;
+      }
+      .otp-input {
+        letter-spacing: 10px;
+        font-size: 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="forgot-flex pagefade">
+    <form class="form-card" id="fpForm" autocomplete="off" tabindex="1">
+      <h2>Forgot Password</h2>
+      <p>Enter your registered email below to receive a verification code</p>
+
+      <div class="form-grid" id="fpEmailStage">
+        <input type="email" required placeholder="E-mail address" id="fpEmail" />
+        <button id="fpRequestBtn" type="button" disabled>Request OTP</button>
+      </div>
+      <div class="form-grid hidden" id="fpOtpStage">
+        <input maxlength="6" pattern="[0-9]{6}" autofocus required placeholder="Enter OTP" id="fpOtp" class="otp-input" />
+        <button id="fpVerifyBtn" type="button" disabled>Verify OTP</button>
+      </div>
+      <div class="form-grid hidden" id="fpNewPassStage">
+        <input type="password" required placeholder="New Password" id="fpNewPass" name="newpass" minlength="6" />
+        <input type="password" required placeholder="Confirm New Password" id="fpConfPass" name="confpass" minlength="6" />
+      </div>
+      <div class="form-grid hidden" id="fpFinalActions">
+        <button id="fpSubmitBtn" type="submit">Set New Password</button>
+      </div>
+      <div class="error-msg" id="fpErr"></div>
+      <div class="footer-links">
+        <a href="help.html">Help</a>
+      </div>
+    </form>
+    <div class="slider-card">
+      <img id="fpImg" class="slider-img" alt="Password recovery" />
+      <div id="fpCap" class="slider-caption"></div>
+    </div>
+
+<script>
+  // Slider setup
+  const fpImgs = [
+    { src: "https://source.unsplash.com/featured/?password,lock", cap: "Secure Password Recovery" },
+    { src: "https://source.unsplash.com/featured/?email,security", cap: "Password Reset via Email OTP" },
+    { src: "https://source.unsplash.com/featured/?digital,lock", cap: "Keep Your Account Safe" },
+  ];
+  let fpIdx = 0;
+  function cycleFpImages() {
+    const img = document.getElementById("fpImg");
+    const cap = document.getElementById("fpCap");
+    img.style.opacity = 0.2;
+    setTimeout(() => {
+      img.src = fpImgs[fpIdx].src;
+      cap.textContent = fpImgs[fpIdx].cap;
+      img.style.opacity = 1;
+      fpIdx = (fpIdx + 1) % fpImgs.length;
+    }, 350);
+  }
+  cycleFpImages();
+  setInterval(cycleFpImages, 4000);
+
+  const fpEmail = document.getElementById("fpEmail");
+  const fpRequestBtn = document.getElementById("fpRequestBtn");
+  const fpOtp = document.getElementById("fpOtp");
+  const fpVerifyBtn = document.getElementById("fpVerifyBtn");
+  const fpNewPassStage = document.getElementById("fpNewPassStage");
+  const fpConfPass = document.getElementById("fpConfPass");
+  const fpFinalActions = document.getElementById("fpFinalActions");
+  const fpSubmitBtn = document.getElementById("fpSubmitBtn");
+  const fpErr = document.getElementById("fpErr");
+
+  fpEmail.addEventListener("input", () => {
+    const valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(fpEmail.value);
+    fpRequestBtn.disabled = !valid;
+    fpErr.textContent = valid ? "" : "Enter a valid email address.";
+  });
+
+  fpRequestBtn.addEventListener("click", () => {
+    fpErr.textContent = "";
+    fpRequestBtn.disabled = true;
+    setTimeout(() => {
+      document.getElementById("fpEmailStage").classList.add("hidden");
+      document.getElementById("fpOtpStage").classList.remove("hidden");
+      fpOtp.focus();
+    }, 600);
+  });
+
+  fpOtp.addEventListener("input", () => {
+    const valid = /^\d{6}$/.test(fpOtp.value);
+    fpVerifyBtn.disabled = !valid;
+    fpErr.textContent = "";
+  });
+
+  fpVerifyBtn.addEventListener("click", () => {
+    fpErr.textContent = "";
+    if (fpOtp.value === "123456") {
+      document.getElementById("fpOtpStage").classList.add("hidden");
+      fpNewPassStage.classList.remove("hidden");
+      fpFinalActions.classList.remove("hidden");
+      document.getElementById("fpNewPass").focus();
+    } else {
+      fpErr.textContent = "Invalid OTP. Please try again.";
+    }
+  });
+
+  fpNewPassStage.addEventListener("input", () => {
+    const pass = document.getElementById("fpNewPass").value;
+    const conf = fpConfPass.value;
+    fpSubmitBtn.disabled = !(pass && conf && pass.length >= 6 && pass === conf);
+    fpErr.textContent = "";
+  });
+
+  document.getElementById("fpForm").addEventListener("submit", (e) => {
+    e.preventDefault();
+    fpErr.textContent = "";
+    fpSubmitBtn.disabled = true;
+    setTimeout(() => {
+      alert("Password reset successful.");
+      window.location.href = "login.html";
+    }, 1000);
+  });
+</script>
+</div>
+</body>
+</html>
