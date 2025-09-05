@@ -1,423 +1,445 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>FINQ • Login</title>
-  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-  <style>
-    body {
-      min-height: 100vh;
-      margin: 0;
-      font-family: 'Poppins', Arial, sans-serif;
-      background: linear-gradient(135deg, #e3f5fb 0%, #90caf9 45%, #a3bffa 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow-x: hidden;
-    }
-    .auth-flex {
-      display: flex;
-      gap: 36px;
-      background: rgba(255 255 255 / 0.16);
-      box-shadow: 0 0 32px rgb(75 112 190 / 0.2);
-      border-radius: 36px;
-      backdrop-filter: blur(20px);
-      padding: 40px 48px;
-      max-width: 900px;
-      width: 100%;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-    .form-card,
-    .slider-card {
-      background: rgba(255 255 255 / 0.3);
-      box-shadow: 0 2px 18px rgb(52 119 235 / 0.2);
-      border-radius: 24px;
-      padding: 40px 40px 48px;
-      display: flex;
-      flex-direction: column;
-      flex: 1 1 320px;
-      min-width: 320px;
-      max-width: 400px;
-      justify-content: center;
-    }
-    .form-card h2 {
-      font-weight: 800;
-      font-size: 2.6rem;
-      margin-bottom: 12px;
-      color: #184089;
-      text-align: center;
-      text-shadow: 0 0 7px rgba(220,237,260,0.5);
-      user-select: none;
-    }
-    .form-card p {
-      margin: 0 0 28px;
-      text-align: center;
-      font-size: 1rem;
-      color: #395684cc;
-    }
-    .form-card p a {
-      color: #1f62d7;
-      font-weight: 600;
-      text-decoration: none;
-    }
-    .form-card p a:hover {
-      text-decoration: underline;
-    }
-    .form-grid {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-    }
-    .form-grid input[type="email"],
-    .form-grid input[type="password"] {
-      font-size: 1.1rem;
-      padding: 14px 18px;
-      border-radius: 15px;
-      border: 2px solid #a8c2ff;
-      background: rgba(255 255 255 / 0.35);
-      color: #1c2d55;
-      outline-offset: 2px;
-      transition: border-color 0.3s ease;
-      font-weight: 600;
-      user-select: text;
-    }
-    .form-grid input[type="email"]:focus,
-    .form-grid input[type="password"]:focus {
-      border-color: #1f62d7;
-      background: rgba(255 255 255 / 0.72);
-      color: #14336a;
-      user-select: text;
-    }
-    .pwrow {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-    }
-    .pwrow input {
-      flex-grow: 1;
-    }
-    .pwrow button.toggle {
-      font-size: 1.3rem;
-      background: transparent;
-      border: none;
-      cursor: pointer;
-      user-select: none;
-      padding: 0 8px 0 0;
-      color: #1f62d7;
-      transition: color 0.2s ease;
-    }
-    .pwrow button.toggle:hover {
-      color: #14336a;
-    }
-    .g-recaptcha {
-      margin-top: 16px;
-      margin-bottom: 12px;
-      align-self: center;
-    }
-    .form-actions {
-      margin-top: 28px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 18px;
-    }
-    button.primary-btn, .oauth-btn {
-      position: relative;
-      overflow: hidden;
-      outline: none;
-      -webkit-tap-highlight-color: transparent;
-    }
-    button.primary-btn {
-      padding: 15px 0;
-      width: 100%;
-      font-size: 1.2rem;
-      font-weight: 700;
-      color: white;
-      background: linear-gradient(90deg, #1976d7 25%, #4cb3ff 90%);
-      border-radius: 22px;
-      border: none;
-      cursor: pointer;
-      box-shadow: 0 4px 19px rgb(39 95 182 / 0.9);
-      user-select: none;
-      transition: filter 0.3s ease;
-    }
-    button.primary-btn:disabled {
-      filter: brightness(0.7);
-      cursor: not-allowed;
-    }
-    button.primary-btn:focus-visible {
-      outline: 3px solid #4cb3ff;
-      outline-offset: 3px;
-    }
-    .ripple {
-      position: absolute;
-      border-radius: 50%;
-      background: rgba(255 255 255 / 0.5);
-      transform: scale(0);
-      animation: ripple-effect 600ms linear;
-      pointer-events: none;
-    }
-    @keyframes ripple-effect {
-      to {
-        transform: scale(4);
-        opacity: 0;
-      }
-    }
-    .or-sep {
-      color: #57719d;
-      font-weight: 600;
-      user-select: none;
-    }
-    .oauth-btn {
-      width: 100%;
-      font-weight: 600;
-      font-size: 1.05rem;
-      padding: 12px;
-      border: none;
-      border-radius: 22px;
-      background: white;
-      box-shadow: 0 0 17px rgb(58 113 182 / 0.25);
-      color: #304e7c;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-      user-select: none;
-      transition: box-shadow 0.2s ease;
-    }
-    .oauth-btn:hover {
-      box-shadow: 0 0 20px rgb(17 67 157 / 0.8);
-    }
-    .oauth-btn img {
-      width: 22px;
-      height: 22px;
-      object-fit: contain;
-    }
-    .footer-link {
-      text-align: center;
-      margin-top: 16px;
-      user-select: none;
-    }
-    .footer-link a {
-      color: #1976d7;
-      font-weight: 600;
-      text-decoration: none;
-      transition: text-decoration 0.2s ease;
-    }
-    .footer-link a:hover,
-    .footer-link a:focus {
-      text-decoration: underline;
-    }
-    .error-msg {
-      color: #db2c2c;
-      font-weight: 700;
-      height: 26px;
-      font-size: 1rem;
-      margin-top: 10px;
-      text-align: center;
-      user-select: none;
-      transition: opacity 0.2s ease;
-    }
-    .slider-card {
-      flex-grow: 1.1;
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      min-width: 360px;
-      max-width: 450px;
-      border-radius: 24px;
-      background: rgba(255 255 255 / 0.32);
-      box-shadow: 0 0 44px rgb(24 64 137 / 0.3);
-      backdrop-filter: blur(26px);
-      user-select: none;
-    }
-    .slider-card img {
-      width: 100%;
-      height: 100%;
-      max-height: 320px;
-      border-radius: 18px;
-      object-fit: cover;
-      box-shadow: 0 0 28px rgb(89 136 242 / 0.5);
-      user-select: none;
-      transition: opacity 0.4s ease;
-    }
-    .slider-caption {
-      margin-top: 18px;
-      font-weight: 700;
-      font-size: 1.15rem;
-      color: #2e4a89;
-      user-select: none;
-      text-align: center;
-      text-shadow: 0 0 8px rgb(194 210 247 / 0.7);
-    }
-    @media (max-width: 900px) {
-      body {
-        padding: 20px 10px;
-      }
-      .auth-flex {
-        flex-direction: column;
-        padding: 35px 20px;
-        max-width: 100%;
-      }
-      .slider-card {
-        max-width: none;
-        margin-top: 16px;
-        height: 320px;
-        width: 100%;
-      }
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>FINQ • Login</title>
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+<style>
+body {
+min-height: 100vh;
+margin: 0;
+font-family: 'Poppins', Arial, sans-serif;
+background: linear-gradient(135deg, #fff4b3 0%, #fffbe6 45%, #e3f2fd 100%);
+display: flex;
+align-items: center;
+justify-content: center;
+overflow-x: hidden;
+}
+.auth-flex {
+display: flex;
+gap: 36px;
+background: rgba(255 255 255 / 0.16);
+box-shadow: 0 0 32px rgb(75 112 190 / 0.2);
+border-radius: 36px;
+backdrop-filter: blur(20px);
+padding: 40px 48px;
+max-width: 900px;
+width: 100%;
+flex-wrap: wrap;
+justify-content: center;
+}
+.form-card,
+.slider-card {
+background: rgba(255 255 255 / 0.3);
+box-shadow: 0 2px 18px rgb(52 119 235 / 0.2);
+border-radius: 24px;
+padding: 40px 40px 48px;
+display: flex;
+flex-direction: column;
+flex: 1 1 320px;
+min-width: 320px;
+max-width: 400px;
+justify-content: center;
+}
+.form-card h2 {
+font-weight: 800;
+font-size: 2.4rem;
+margin-bottom: 12px;
+color: #184089;
+text-align: center;
+text-shadow: 0 2px 4px rgba(24, 64, 137, 0.2);
+user-select: none;
+}
+.form-card p {
+margin: 0 0 28px;
+text-align: center;
+font-size: 1rem;
+color: #395684cc;
+}
+.form-card p a {
+color: #1f62d7;
+font-weight: 600;
+text-decoration: none;
+}
+.form-card p a:hover {
+text-decoration: underline;
+}
+.form-grid {
+display: flex;
+flex-direction: column;
+gap: 20px;
+}
+.form-grid input[type="email"],
+.form-grid input[type="password"] {
+font-size: 1.1rem;
+padding: 16px 18px;
+border-radius: 15px;
+border: 2px solid #a8c2ff;
+background: rgba(255 255 255 / 0.8);
+color: #1c2d55;
+outline-offset: 2px;
+transition: all 0.3s ease;
+font-weight: 600;
+user-select: text;
+}
+.form-grid input[type="email"]:focus,
+.form-grid input[type="password"]:focus {
+border-color: #1f62d7;
+background: rgba(255 255 255 / 0.95);
+box-shadow: 0 0 0 3px rgba(31, 98, 215, 0.1);
+color: #14336a;
+user-select: text;
+}
+.pwrow {
+display: flex;
+gap: 10px;
+align-items: center;
+}
+.pwrow input {
+flex-grow: 1;
+}
+.pwrow button.toggle {
+font-size: 1.3rem;
+background: transparent;
+border: none;
+cursor: pointer;
+user-select: none;
+padding: 0 8px 0 0;
+color: #1f62d7;
+transition: color 0.2s ease;
+}
+.pwrow button.toggle:hover {
+color: #14336a;
+}
+.g-recaptcha {
+margin-top: 16px;
+margin-bottom: 12px;
+align-self: center;
+}
+.form-actions {
+margin-top: 28px;
+display: flex;
+flex-direction: column;
+align-items: center;
+gap: 18px;
+}
+button.primary-btn, .oauth-btn {
+position: relative;
+overflow: hidden;
+outline: none;
+-webkit-tap-highlight-color: transparent;
+}
+button.primary-btn {
+padding: 16px 0;
+width: 100%;
+font-size: 1.2rem;
+font-weight: 700;
+color: white;
+background: linear-gradient(90deg, #1976d7 25%, #4cb3ff 90%);
+border-radius: 22px;
+border: none;
+cursor: pointer;
+box-shadow: 0 4px 19px rgb(39 95 182 / 0.7);
+user-select: none;
+transition: all 0.3s ease;
+}
+button.primary-btn:disabled {
+opacity: 0.7;
+cursor: not-allowed;
+}
+button.primary-btn:hover:not(:disabled) {
+transform: translateY(-1px);
+box-shadow: 0 6px 25px rgb(39 95 182 / 0.8);
+}
+.oauth-btn {
+width: 100%;
+font-weight: 600;
+font-size: 1.05rem;
+padding: 14px;
+border: none;
+border-radius: 22px;
+background: white;
+box-shadow: 0 0 17px rgb(58 113 182 / 0.25);
+color: #304e7c;
+cursor: pointer;
+display: flex;
+align-items: center;
+justify-content: center;
+gap: 12px;
+user-select: none;
+transition: all 0.3s ease;
+}
+.oauth-btn:hover {
+box-shadow: 0 4px 20px rgb(17 67 157 / 0.6);
+transform: translateY(-1px);
+}
+.oauth-icon {
+width: 22px;
+height: 22px;
+display: flex;
+align-items: center;
+justify-content: center;
+font-weight: 700;
+border-radius: 3px;
+}
+.google-icon {
+background: linear-gradient(135deg, #4285f4, #34a853, #fbbc05, #ea4335);
+color: white;
+font-size: 14px;
+}
+.footer-link {
+text-align: center;
+margin-top: 16px;
+user-select: none;
+}
+.footer-link a {
+color: #1976d7;
+font-weight: 600;
+text-decoration: none;
+transition: text-decoration 0.2s ease;
+}
+.footer-link a:hover {
+text-decoration: underline;
+}
+.error-msg {
+color: #db2c2c;
+font-weight: 700;
+min-height: 26px;
+font-size: 1rem;
+margin-top: 10px;
+text-align: center;
+user-select: text;
+transition: opacity 0.3s ease;
+}
+.success-msg {
+color: #1b5e20;
+font-weight: 700;
+}
+.slider-card {
+flex-grow: 1.1;
+position: relative;
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+min-width: 360px;
+max-width: 450px;
+border-radius: 24px;
+background: rgba(255 255 255 / 0.32);
+box-shadow: 0 0 44px rgb(24 64 137 / 0.3);
+backdrop-filter: blur(26px);
+user-select: none;
+}
+.slider-card img {
+width: 100%;
+height: 100%;
+max-height: 300px;
+border-radius: 18px;
+object-fit: cover;
+box-shadow: 0 0 28px rgb(89 136 242 / 0.5);
+user-select: none;
+transition: opacity 0.4s ease;
+}
+.slider-caption {
+margin-top: 18px;
+font-weight: 700;
+font-size: 1.15rem;
+color: #2e4a89;
+user-select: none;
+text-align: center;
+text-shadow: 0 0 8px rgb(194 210 247 / 0.7);
+}
+@media (max-width: 900px) {
+body {
+padding: 20px 10px;
+}
+.auth-flex {
+flex-direction: column;
+padding: 35px 20px;
+max-width: 100%;
+}
+.slider-card {
+max-width: none;
+margin-top: 16px;
+height: 300px;
+width: 100%;
+}
+}
+.demo-info {
+background: rgba(25, 118, 210, 0.1);
+border: 1px solid #1976d2;
+border-radius: 8px;
+padding: 12px;
+margin-bottom: 16px;
+font-size: 14px;
+color: #1976d2;
+text-align: center;
+cursor: pointer;
+}
+.demo-info:hover {
+background: rgba(25, 118, 210, 0.15);
+}
+</style>
 </head>
 <body>
-  <div class="auth-flex">
-    <form class="form-card" id="loginForm" autocomplete="on" tabindex="1" novalidate>
-      <h2>Login to FINQ</h2>
-      <p>
-        Don't have an account? <a href="signup.html" class="footer-link">Sign up here</a>
-      </p>
-      <div class="form-grid">
-        <input type="email" id="lemail" placeholder="E-mail address" autocomplete="username" required />
-        <div class="pwrow">
-          <input type="password" id="lpass" placeholder="Password" autocomplete="current-password" required />
-          <button type="button" class="toggle" tabindex="-1" onclick="togglePw('lpass', this)" aria-label="Toggle password visibility">👁️</button>
-        </div>
-      </div>
+<div class="auth-flex">
+<form class="form-card" id="loginForm" autocomplete="on" tabindex="1" novalidate>
+<h2>Welcome Back</h2>
+<p>
+Don't have an account? <a href="signup.html" class="footer-link">Sign up here</a>
+</p>
 
-      <div class="g-recaptcha" data-sitekey="6LeN77grAAAAAEtlkWFhwBVLOaNuqLjGgO1JAWlu"></div>
 
-      <div class="footer-link" style="margin-top: 6px;">
-        <a href="forgot.html">Forgot password?</a>
-      </div>
+<div class="demo-info" title="Click to auto-fill demo credentials">
+<strong>Demo Account:</strong> admin@finq.com / finq123
+</div>
 
-      <div id="lerr" class="error-msg"></div>
 
-      <div class="form-actions">
-        <button id="logBtn" class="primary-btn" type="submit" disabled>Login to FINQ</button>
-        <div class="or-sep">or continue with</div>
-        <button id="googleLog" class="oauth-btn" type="button" aria-label="Login with Google">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="Google logo" />
-          Google
-        </button>
-        <button id="appleLog" class="oauth-btn" type="button" aria-label="Login with Apple">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Apple_logo_black.svg" alt="Apple logo" />
-          Apple
-        </button>
-      </div>
-      <div class="footer-link" style="margin-top: 12px;">
-        <a href="help.html">Help</a>
-      </div>
-    </form>
-    <div class="slider-card">
-      <img id="limg" class="slider-img" alt="Family finance login" />
-      <div id="lcap" class="slider-caption"></div>
-    </div>
-  </div>
+<div class="form-grid">
+<input type="email" id="lemail" placeholder="E-mail address" autocomplete="username" required />
+<div class="pwrow">
+<input type="password" id="lpass" placeholder="Password" autocomplete="current-password" required />
+<button type="button" class="toggle" tabindex="-1" onclick="togglePw('lpass', this)">👁️</button>
+</div>
+</div>
+
+
+<div class="g-recaptcha" data-sitekey="6Le3PL4rAAAAAPjsj4jlgwSnsXSgeRS_yjltBnH7"></div>
+
+
+<div class="footer-link" style="margin-top: 6px;">
+<a href="forgot.html">Forgot password?</a>
+</div>
+
+
+<div id="lerr" class="error-msg"></div>
+
+
+<div class="form-actions">
+<button id="logBtn" class="primary-btn" type="submit" disabled>Login to FINQ</button>
+<div style="color: #57719d; font-weight: 600; user-select: none;">or continue with</div>
+<button id="googleLog" class="oauth-btn" type="button">
+<div class="oauth-icon google-icon">G</div>
+Google
+</button>
+</div>
+<div class="footer-link" style="margin-top: 12px;">
+<a href="help.html">Need Help?</a>
+</div>
+</form>
+<div class="slider-card">
+<img id="limg" src="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='500' height='300' viewBox='0 0 500 300'><rect width='500' height='300' fill='%234fc3f7'/><text x='250' y='150' text-anchor='middle' dy='.3em' fill='white' font-family='Arial' font-size='24' font-weight='bold'>Secure Finance</text></svg>" alt="Secure login" />
+<div id="lcap" class="slider-caption">Secure Access to Your Finance</div>
+</div>
+</div>
 
 <script>
-  // Toggle password visibility
-  function togglePw(id, btn) {
-    const input = document.getElementById(id);
-    if (input.type === 'password') {
-      input.type = 'text';
-      btn.textContent = '🙈';
-    } else {
-      input.type = 'password';
-      btn.textContent = '👁️';
-    }
-  }
+function togglePw(id, btn) {
+const input = document.getElementById(id);
+if (input.type === 'password') {
+input.type = 'text';
+btn.textContent = '🙈';
+} else {
+input.type = 'password';
+btn.textContent = '👁️';
+}
+}
 
-  const emailInput = document.getElementById('lemail');
-  const passwordInput = document.getElementById('lpass');
-  const loginBtn = document.getElementById('logBtn');
-  const errorMsg = document.getElementById('lerr');
+async function fetchJSON(url, { method = 'GET', body, auth = false, headers = {} } = {}) {
+const res = await fetch(url, {
+method,
+headers: {
+'Content-Type': 'application/json',
+...headers,
+},
+body: body ? JSON.stringify(body) : undefined,
+});
+let data = null;
+try { data = await res.json(); } catch {}
+if (!res.ok) throw new Error(data?.message || `Request failed (${res.status})`);
+return data;
+}
 
-  function validateInputs() {
-    errorMsg.textContent = '';
-    if (emailInput.value.trim() && passwordInput.value.trim()) {
-      loginBtn.disabled = false;
-    } else {
-      loginBtn.disabled = true;
-    }
-  }
-  emailInput.addEventListener('input', validateInputs);
-  passwordInput.addEventListener('input', validateInputs);
+const emailInput = document.getElementById('lemail');
+const passwordInput = document.getElementById('lpass');
+const loginBtn = document.getElementById('logBtn');
+const errorMsg = document.getElementById('lerr');
 
-  // Form submit handler
-  document.getElementById('loginForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    errorMsg.textContent = '';
+function validateInputs() {
+errorMsg.textContent = '';
+errorMsg.className = 'error-msg';
+const hasEmail = emailInput.value.trim().length > 0;
+const hasPassword = passwordInput.value.trim().length > 0;
+loginBtn.disabled = !(hasEmail && hasPassword);
+}
+emailInput.addEventListener('input', validateInputs);
+passwordInput.addEventListener('input', validateInputs);
 
-    if (!emailInput.value.trim() || !passwordInput.value.trim()) {
-      errorMsg.textContent = 'Please fill both email and password fields.';
-      return;
-    }
-    const recaptchaToken = grecaptcha.getResponse();
-    if (!recaptchaToken) {
-      errorMsg.textContent = 'Please complete the CAPTCHA.';
-      return;
-    }
-    loginBtn.disabled = true;
+// Auto-fill demo account
+const demoInfo = document.querySelector('.demo-info');
+demoInfo.addEventListener('click', () => {
+emailInput.value = 'admin@finq.com';
+passwordInput.value = 'finq123';
+validateInputs();
+});
 
-    try {
-      const response = await fetch('/api/v1/auth/login', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({
-          email: emailInput.value.trim(),
-          password: passwordInput.value,
-          recaptchaToken,
-        }),
-      });
-      if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.message || 'Login failed.');
-      }
-      const data = await response.json();
-      sessionStorage.setItem('accessToken', data.accessToken);
-      if (data.hasFamily) {
-        window.location.href = 'dashboard.html';
-      } else {
-        window.location.href = 'onboard-family.html';
-      }
-    } catch (err) {
-      errorMsg.textContent = err.message;
-    } finally {
-      loginBtn.disabled = false;
-    }
-  });
+document.getElementById('loginForm').addEventListener('submit', async (e) => {
+e.preventDefault();
+errorMsg.textContent = '';
+errorMsg.className = 'error-msg';
 
-  // Ripple effect on buttons
-  function createRipple(event) {
-    const button = event.currentTarget;
-    const circle = document.createElement('span');
-    const diameter = Math.max(button.clientWidth, button.clientHeight);
-    const radius = diameter / 2;
-    circle.style.width = circle.style.height = diameter + 'px';
-    circle.style.left = event.clientX - button.getBoundingClientRect().left - radius + 'px';
-    circle.style.top = event.clientY - button.getBoundingClientRect().top - radius + 'px';
-    circle.classList.add('ripple');
+if (!emailInput.value.trim() || !passwordInput.value.trim()) {
+errorMsg.textContent = 'Please fill both email and password fields.';
+return;
+}
 
-    const ripple = button.getElementsByClassName('ripple')[0];
-    if (ripple) ripple.remove();
+const recaptchaToken = grecaptcha.getResponse();
+if (!recaptchaToken) {
+errorMsg.textContent = 'Please complete the CAPTCHA verification.';
+return;
+}
 
-    button.appendChild(circle);
-  }
-  document.querySelectorAll('.primary-btn, .oauth-btn').forEach(btn => {
-    btn.addEventListener('click', createRipple);
-  });
+loginBtn.disabled = true;
+const originalText = loginBtn.textContent;
+loginBtn.textContent = 'Signing in...';
 
-  // Google Login button redirects to backend OAuth flow
-  document.getElementById('googleLog').onclick = () => {
-    window.location.href = '/api/v1/auth/google';
-  };
+try {
+const data = await fetchJSON('http://localhost:8081/api/v1/auth/login', {
+method: 'POST',
+body: {
+email: emailInput.value.trim(),
+password: passwordInput.value,
+recaptchaToken,
+},
+});
 
-  // Apple login placeholder
-  document.getElementById('appleLog').onclick = () => alert('Apple Sign-In coming soon!');
+sessionStorage.setItem('accessToken', data.accessToken);
+sessionStorage.setItem('userInfo', JSON.stringify(data.user));
+
+errorMsg.textContent = `Welcome back, ${data.user.displayName}!`;
+errorMsg.className = 'error-msg success-msg';
+
+setTimeout(() => {
+window.location.href = 'dashboard.html';
+}, 1500);
+} catch (err) {
+errorMsg.textContent = err.message || 'Login failed. Please try again.';
+errorMsg.className = 'error-msg';
+loginBtn.disabled = false;
+loginBtn.textContent = originalText;
+} finally {
+grecaptcha.reset();
+}
+});
+
+// Google OAuth (Fixed)
+document.getElementById('googleLog').addEventListener('click', () => {
+console.log('Initiating Google OAuth');
+window.location.href = 'http://localhost:8081/api/v1/auth/google';
+});
+
+console.log('Login page loaded successfully');
 </script>
 </body>
 </html>

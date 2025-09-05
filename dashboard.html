@@ -1,148 +1,140 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>FINQ Dashboard</title>
-  <link rel="stylesheet" href="style.css" />
-  <script defer src="script.js"></script>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>FINQ Dashboard</title>
+<link rel="stylesheet" href="dashboard.css" />
+<script defer src="dashboard.js"></script>
 </head>
 <body class="preload">
-  <!-- Navbar -->
-  <nav class="navbar">
-    <div class="logo-container">
-      <div class="logo-box">
-        <img src="Images/LOGO(FinQ).png" alt="FINQ Logo" class="logo-img" />
-      </div>
-      <div class="logo-text">FINQ</div>
-    </div>
-    <div class="controls">
-      <select id="language-switch">
-        <option value="en">EN</option>
-        <option value="hi">हिंदी</option>
-      </select>
-      <button id="theme-toggle" aria-label="Toggle theme">🌙</button>
-      <button id="profile-btn" aria-label="Open profile">👤</button>
-    </div>
-  </nav>
+<nav class="navbar">
+<div class="logo-container">
+<div class="logo-box">
+<img src="https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?w=40&h=40&fit=crop&auto=format" alt="FINQ Logo" class="logo-img" />
+</div>
+<div class="logo-text">FINQ</div>
+</div>
+<div class="controls">
+<select id="language-switch">
+<option value="en">EN</option>
+<option value="hi">हिंदी</option>
+</select>
+<button id="theme-toggle" aria-label="Toggle theme">🌙</button>
+<button id="profile-btn" aria-label="Open profile">👤</button>
+</div>
+</nav>
 
-  <!-- Greetings -->
-  <section class="greeting-section">
-    <img src="Images/Greetings.png" alt="Greetings" class="greeting-img">
-  </section>
+<section class="greeting-section">
+<img src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=800&h=200&fit=crop&auto=format" alt="Greetings" class="greeting-img">
+</section>
 
-  <!-- Dashboard -->
-  <main class="dashboard">
-    <!-- Stats Cards -->
-    <h2 class="section-title">📌 Overview</h2>
-    <section class="cards">
-      <div class="card income" id="card-income" tabindex="0" role="button" aria-label="Open Income details">
-        <h3>💰 Income This Month</h3>
-        <p class="value" id="income-month">₹0</p>
-      </div>
-      <div class="card expense" id="card-expense" tabindex="0" role="button" aria-label="Open Expense details">
-        <h3>💸 Expense This Month</h3>
-        <p class="value" id="expense-month">₹0</p>
-      </div>
-      <div class="card budget" id="card-budget" tabindex="0" role="button" aria-label="Open Budget details">
-        <h3>🎯 Budget Remaining</h3>
-        <p class="value" id="budget-remaining">₹0</p>
-      </div>
-    </section>
+<main class="dashboard">
+<h2 class="section-title">📌 Overview</h2>
+<section class="cards">
+<div class="card income" id="card-income" tabindex="0" role="button" aria-label="Open Income details">
+<h3>💰 Income This Month</h3>
+<p class="value" id="income-month">₹0</p>
+</div>
+<div class="card expense" id="card-expense" tabindex="0" role="button" aria-label="Open Expense details">
+<h3>💸 Expense This Month</h3>
+<p class="value" id="expense-month">₹0</p>
+</div>
+<div class="card budget" id="card-budget" tabindex="0" role="button" aria-label="Open Budget details">
+<h3>🎯 Budget Remaining</h3>
+<p class="value" id="budget-remaining">₹0</p>
+</div>
+</section>
 
-    <!-- Budget Progress -->
-    <section class="progress">
-      <h2 class="section-title">📈 Budget Usage</h2>
-      <div class="progress-meta">
-        <span id="progress-label">0% of ₹0 used</span>
-      </div>
-      <div class="progress-bar" aria-label="Budget usage">
-        <div id="progress-fill" aria-hidden="true"></div>
-      </div>
-      <p id="nudge">Start by adding a transaction to unlock insights.</p>
-    </section>
+<section class="progress">
+<h2 class="section-title">📈 Budget Usage</h2>
+<div class="progress-meta">
+<span id="progress-label">0% of ₹0 used</span>
+</div>
+<div class="progress-bar" aria-label="Budget usage">
+<div id="progress-fill" aria-hidden="true"></div>
+</div>
+<p id="nudge">Start by adding a transaction to unlock insights.</p>
+</section>
 
-    <!-- Action Cards -->
-    <section class="action-cards">
-      <div class="action-card income-card" id="add-income" role="button" tabindex="0">
-        <h3>➕ Add Income</h3>
-      </div>
-      <div class="action-card expense-card" id="add-expense" role="button" tabindex="0">
-        <h3>➖ Add Expense</h3>
-      </div>
-    </section>
+<section class="action-cards">
+<div class="action-card income-card" id="add-income" role="button" tabindex="0">
+<h3>➕ Add Income</h3>
+</div>
+<div class="action-card expense-card" id="add-expense" role="button" tabindex="0">
+<h3>➖ Add Expense</h3>
+</div>
+</section>
 
-    <!-- Filters -->
-    <section class="filters">
-      <div class="filter-row">
-        <div class="filter-chips">
-          <button class="filter active" data-type="all">All</button>
-          <button class="filter" data-type="income">Income</button>
-          <button class="filter" data-type="expense">Expense</button>
-          <button class="filter" data-type="food">Food</button>
-          <button class="filter" data-type="travel">Travel</button>
-          <button class="filter" data-type="rent">Rent</button>
-          <button class="filter" data-type="others">Others</button>
-        </div>
-        <div class="filter-dates">
-          <label>From <input type="date" id="from-date"></label>
-          <label>To <input type="date" id="to-date"></label>
-          <button id="reset-dates" class="mini-btn">Reset</button>
-        </div>
-      </div>
-      <div class="tz-note">Times shown in India Standard Time (IST).</div>
-    </section>
+<section class="filters">
+<div class="filter-row">
+<div class="filter-chips">
+<button class="filter active" data-type="all">All</button>
+<button class="filter" data-type="income">Income</button>
+<button class="filter" data-type="expense">Expense</button>
+<button class="filter" data-type="food">Food</button>
+<button class="filter" data-type="travel">Travel</button>
+<button class="filter" data-type="rent">Rent</button>
+<button class="filter" data-type="others">Others</button>
+</div>
+<div class="filter-dates">
+<label>From <input type="date" id="from-date"></label>
+<label>To <input type="date" id="to-date"></label>
+<button id="reset-dates" class="mini-btn">Reset</button>
+</div>
+</div>
+<div class="tz-note">Times shown in India Standard Time (IST).</div>
+</section>
 
-    <!-- Transactions (Table) -->
-    <section class="transactions">
-      <h2 class="section-title">💬 Transactions</h2>
-      <div class="transaction-frame table-wrap">
-        <div class="table-meta">
-          <span id="tx-count">0 items</span>
-        </div>
-        <table id="tx-table">
-          <thead>
-            <tr>
-              <th>Amount</th>
-              <th>Type</th>
-              <th>Category</th>
-              <th>Mode</th>
-              <th>Notes</th>
-              <th>Date & Time (IST)</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody id="tx-tbody"></tbody>
-        </table>
-        <div class="empty-msg hidden" id="empty-table">
-          No records yet. Use Add Income/Expense to get started.
-        </div>
-      </div>
-    </section>
-  </main>
+<section class="transactions">
+<h2 class="section-title">💬 Transactions</h2>
+<div class="transaction-frame table-wrap">
+<div class="table-meta">
+<span id="tx-count">0 items</span>
+</div>
+<table id="tx-table">
+<thead>
+<tr>
+<th>Amount</th>
+<th>Type</th>
+<th>Category</th>
+<th>Mode</th>
+<th>Notes</th>
+<th>Date & Time (IST)</th>
+<th>Actions</th>
+</tr>
+</thead>
+<tbody id="tx-tbody"></tbody>
+</table>
+<div class="empty-msg hidden" id="empty-table">
+No transactions yet. Add your first income or expense to get started!
+</div>
+</div>
+</section>
+</main>
 
-  <!-- Add Transaction Modal -->
-  <div id="transaction-popup" class="popup" aria-hidden="true">
-    <div class="popup-content">
-      <h3 id="add-transaction-title">➕ Add Transaction</h3>
-      <p id="error-msg" class="error" role="alert"></p>
+<div id="transaction-popup" class="popup" aria-hidden="true">
+<div class="popup-content">
+<h3 id="add-transaction-title">➕ Add Transaction</h3>
+<p id="error-msg" class="error" role="alert"></p>
 
-      <input type="number" id="amount" placeholder="Amount (₹)" inputmode="numeric">
-      <select id="category"></select>
-      <select id="mode">
-        <option value="cash">💵 Cash</option>
-        <option value="upi">📱 UPI</option>
-      </select>
-      <input type="text" id="notes" placeholder="Notes (optional)">
+<input type="number" id="amount" placeholder="Amount (₹)" inputmode="numeric" min="1">
+<select id="category"></select>
+<select id="mode">
+<option value="cash">💵 Cash</option>
+<option value="upi">📱 UPI</option>
+<option value="card">💳 Card</option>
+<option value="bank">🏦 Bank Transfer</option>
+</select>
+<input type="text" id="notes" placeholder="Notes (optional)" maxlength="100">
 
-      <div class="popup-actions">
-        <button id="save-transaction">Save</button>
-        <button id="close-popup">Cancel</button>
-      </div>
-    </div>
-  </div>
+<div class="popup-actions">
+<button id="save-transaction">Save Transaction</button>
+<button id="close-popup">Cancel</button>
+</div>
+</div>
+</div>
 
-  <!-- Toasts -->
-  <div id="toast-container" aria-live="polite" aria-atomic="true"></div>
+<div id="toast-container" aria-live="polite" aria-atomic="true"></div>
 </body>
 </html>

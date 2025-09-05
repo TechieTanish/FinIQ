@@ -1,477 +1,428 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>FINQ • Sign Up</title>
-  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-  <style>
-    body {
-      min-height: 100vh;
-      margin: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: 'Poppins', Arial, sans-serif;
-      background: linear-gradient(135deg, #e3f2fd 0%, #90caf9 45%, #d1c4e9 100%);
-      overflow-x: hidden;
-    }
-    .auth-flex {
-      display: flex;
-      gap: 36px;
-      background: rgba(255, 255, 255, 0.13);
-      box-shadow: 0 4px 32px rgba(0, 0, 0, 0.11);
-      border-radius: 36px;
-      padding: 45px 35px;
-      backdrop-filter: blur(24px);
-      max-width: 900px;
-      width: 100%;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-    .form-card,
-    .slider-card {
-      border-radius: 24px;
-      box-shadow: 0 4px 32px #1976d245;
-      background: rgba(255, 255, 255, 0.28);
-      display: flex;
-      flex-direction: column;
-      min-width: 340px;
-      padding: 40px 32px;
-      flex: 1 1 0;
-      justify-content: center;
-    }
-    .form-card h2 {
-      font-size: 2.1rem;
-      margin-bottom: 8px;
-      letter-spacing: -1px;
-      text-align: center;
-      color: #184089;
-    }
-    .form-card p {
-      margin: 0 0 20px 0;
-      text-align: center;
-    }
-    .form-grid {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-    .form-grid input[type='email'],
-    .form-grid input[type='password'] {
-      padding: 11px;
-      font-size: 1rem;
-      border-radius: 13px;
-      border: 1.7px solid #90caf9;
-      background: rgba(255, 255, 255, 0.33);
-      outline: none;
-    }
-    .form-grid input:focus {
-      border: 2px solid #1976d2;
-    }
-    .pwrow {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .pwrow input {
-      flex: 1;
-    }
-    .pwrow .toggle {
-      background: none;
-      border: none;
-      margin-left: -32px;
-      cursor: pointer;
-      font-size: 1.05em;
-      user-select: none;
-    }
-    .form-actions {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-    .primary-btn {
-      position: relative;
-      overflow: hidden;
-      padding: 13px 0;
-      background: linear-gradient(90deg, #1976d2 20%, #42a5f5 80%);
-      color: #fff;
-      font-size: 1rem;
-      border: none;
-      border-radius: 16px;
-      font-weight: 600;
-      cursor: pointer;
-      user-select: none;
-      box-shadow: 0 4px 19px rgba(25, 118, 210, 0.9);
-      transition: filter 0.3s ease;
-      outline: none;
-    }
-    .primary-btn:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-    }
-    .primary-btn:focus-visible {
-      outline: 3px solid #4cb3ff;
-      outline-offset: 3px;
-    }
-    .ripple {
-      position: absolute;
-      border-radius: 50%;
-      background: rgba(255 255 255 / 0.5);
-      transform: scale(0);
-      animation: ripple-effect 600ms linear;
-      pointer-events: none;
-    }
-    @keyframes ripple-effect {
-      to {
-        transform: scale(4);
-        opacity: 0;
-      }
-    }
-    .or-sep {
-      text-align: center;
-      color: #7c8ca2;
-      font-size: 0.98rem;
-      margin: 8px 0;
-      user-select: none;
-    }
-    .oauth-btn {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 13px;
-      padding: 12px;
-      font-size: 1rem;
-      border: none;
-      border-radius: 15px;
-      background: #fff;
-      box-shadow: 0 1.5px 8px rgba(25, 118, 210, 0.2);
-      color: #26315b;
-      cursor: pointer;
-      font-weight: 500;
-      user-select: none;
-      transition: box-shadow 0.2s ease;
-      position: relative;
-      overflow: hidden;
-      outline: none;
-    }
-    .oauth-btn:hover {
-      box-shadow: 0 0 20px rgba(17, 67, 157, 0.8);
-    }
-    .oauth-btn img {
-      height: 21px;
-      user-select: none;
-    }
-    .footer-links {
-      margin-top: 13px;
-      text-align: center;
-      font-size: 0.95em;
-      user-select: none;
-    }
-    .footer-links a {
-      color: #2464e2;
-      text-decoration: none;
-      font-weight: 600;
-    }
-    .footer-links a:hover,
-    .footer-links a:focus {
-      text-decoration: underline;
-    }
-    .g-recaptcha {
-      margin: 10px 0;
-      align-self: center;
-    }
-    .error-msg {
-      color: #e53935;
-      text-align: center;
-      min-height: 26px;
-      font-size: 0.97em;
-      user-select: text;
-      white-space: pre-wrap;
-    }
-    .slider-card {
-      flex: 1.1 1 0;
-      justify-content: center;
-      align-items: center;
-      min-width: 320px;
-      min-height: 330px;
-      background: rgba(242, 245, 255, 0.46);
-    }
-    .slider-img {
-      width: 88%;
-      height: 250px;
-      object-fit: cover;
-      border-radius: 19px;
-      box-shadow: 0 3px 21px #98bffa49;
-      transition: opacity 0.6s;
-    }
-    .slider-caption {
-      font-weight: 600;
-      color: #264084;
-      font-size: 1rem;
-      text-align: center;
-      margin-top: 18px;
-      letter-spacing: 0.04em;
-    }
-    @media (max-width: 900px) {
-      .auth-flex {
-        flex-direction: column;
-        gap: 22px;
-        padding: 0 10px;
-      }
-      .form-card,
-      .slider-card {
-        min-width: 220px;
-        width: 100%;
-      }
-      .slider-img {
-        height: 155px;
-      }
-    }
-    .pagefade {
-      animation: fadein 0.48s;
-    }
-    @keyframes fadein {
-      from {
-        opacity: 0;
-        transform: translateY(30px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>FINQ • Sign Up</title>
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+<style>
+body {
+min-height: 100vh;
+margin: 0;
+font-family: 'Poppins', Arial, sans-serif;
+background: linear-gradient(135deg, #fff4b3 0%, #fffbe6 45%, #e3f2fd 100%);
+display: flex;
+align-items: center;
+justify-content: center;
+overflow-x: hidden;
+}
+.auth-flex {
+display: flex;
+gap: 36px;
+background: rgba(255 255 255 / 0.16);
+box-shadow: 0 0 32px rgb(75 112 190 / 0.2);
+border-radius: 36px;
+backdrop-filter: blur(20px);
+padding: 40px 48px;
+max-width: 900px;
+width: 100%;
+flex-wrap: wrap;
+justify-content: center;
+}
+.form-card,
+.slider-card {
+background: rgba(255 255 255 / 0.3);
+box-shadow: 0 2px 18px rgb(52 119 235 / 0.2);
+border-radius: 24px;
+padding: 40px 40px 48px;
+display: flex;
+flex-direction: column;
+flex: 1 1 320px;
+min-width: 320px;
+max-width: 400px;
+justify-content: center;
+}
+.form-card h2 {
+font-weight: 800;
+font-size: 2.4rem;
+margin-bottom: 12px;
+color: #184089;
+text-align: center;
+text-shadow: 0 2px 4px rgba(24, 64, 137, 0.2);
+user-select: none;
+}
+.form-card p {
+margin: 0 0 28px;
+text-align: center;
+font-size: 1rem;
+color: #395684cc;
+}
+.form-card p a {
+color: #1f62d7;
+font-weight: 600;
+text-decoration: none;
+}
+.form-card p a:hover {
+text-decoration: underline;
+}
+.form-grid {
+display: flex;
+flex-direction: column;
+gap: 20px;
+}
+.form-grid input[type="email"],
+.form-grid input[type="password"] {
+font-size: 1.1rem;
+padding: 16px 18px;
+border-radius: 15px;
+border: 2px solid #a8c2ff;
+background: rgba(255 255 255 / 0.8);
+color: #1c2d55;
+outline-offset: 2px;
+transition: all 0.3s ease;
+font-weight: 600;
+user-select: text;
+}
+.form-grid input[type="email"]:focus,
+.form-grid input[type="password"]:focus {
+border-color: #1f62d7;
+background: rgba(255 255 255 / 0.95);
+box-shadow: 0 0 0 3px rgba(31, 98, 215, 0.1);
+color: #14336a;
+user-select: text;
+}
+.pwrow {
+display: flex;
+gap: 10px;
+align-items: center;
+}
+.pwrow input {
+flex-grow: 1;
+}
+.pwrow button.toggle {
+font-size: 1.3rem;
+background: transparent;
+border: none;
+cursor: pointer;
+user-select: none;
+padding: 0 8px 0 0;
+color: #1f62d7;
+transition: color 0.2s ease;
+}
+.pwrow button.toggle:hover {
+color: #14336a;
+}
+.g-recaptcha {
+margin-top: 16px;
+margin-bottom: 12px;
+align-self: center;
+}
+.form-actions {
+margin-top: 28px;
+display: flex;
+flex-direction: column;
+align-items: center;
+gap: 18px;
+}
+button.primary-btn, .oauth-btn {
+position: relative;
+overflow: hidden;
+outline: none;
+-webkit-tap-highlight-color: transparent;
+}
+button.primary-btn {
+padding: 16px 0;
+width: 100%;
+font-size: 1.2rem;
+font-weight: 700;
+color: white;
+background: linear-gradient(90deg, #1976d7 25%, #4cb3ff 90%);
+border-radius: 22px;
+border: none;
+cursor: pointer;
+box-shadow: 0 4px 19px rgb(39 95 182 / 0.7);
+user-select: none;
+transition: all 0.3s ease;
+}
+button.primary-btn:disabled {
+opacity: 0.7;
+cursor: not-allowed;
+}
+button.primary-btn:hover:not(:disabled) {
+transform: translateY(-1px);
+box-shadow: 0 6px 25px rgb(39 95 182 / 0.8);
+}
+.oauth-btn {
+width: 100%;
+font-weight: 600;
+font-size: 1.05rem;
+padding: 14px;
+border: none;
+border-radius: 22px;
+background: white;
+box-shadow: 0 0 17px rgb(58 113 182 / 0.25);
+color: #304e7c;
+cursor: pointer;
+display: flex;
+align-items: center;
+justify-content: center;
+gap: 12px;
+user-select: none;
+transition: all 0.3s ease;
+}
+.oauth-btn:hover {
+box-shadow: 0 4px 20px rgb(17 67 157 / 0.6);
+transform: translateY(-1px);
+}
+.oauth-icon {
+width: 22px;
+height: 22px;
+display: flex;
+align-items: center;
+justify-content: center;
+font-weight: 700;
+border-radius: 3px;
+}
+.google-icon {
+background: linear-gradient(135deg, #4285f4, #34a853, #fbbc05, #ea4335);
+color: white;
+font-size: 14px;
+}
+.footer-link {
+text-align: center;
+margin-top: 16px;
+user-select: none;
+}
+.footer-link a {
+color: #1976d7;
+font-weight: 600;
+text-decoration: none;
+transition: text-decoration 0.2s ease;
+}
+.footer-link a:hover {
+text-decoration: underline;
+}
+.error-msg {
+color: #db2c2c;
+font-weight: 700;
+min-height: 26px;
+font-size: 1rem;
+margin-top: 10px;
+text-align: center;
+user-select: text;
+transition: opacity 0.3s ease;
+}
+.success-msg {
+color: #1b5e20;
+font-weight: 700;
+}
+.slider-card {
+flex-grow: 1.1;
+position: relative;
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+min-width: 360px;
+max-width: 450px;
+border-radius: 24px;
+background: rgba(255 255 255 / 0.32);
+box-shadow: 0 0 44px rgb(24 64 137 / 0.3);
+backdrop-filter: blur(26px);
+user-select: none;
+}
+.slider-card img {
+width: 100%;
+height: 100%;
+max-height: 300px;
+border-radius: 18px;
+object-fit: cover;
+box-shadow: 0 0 28px rgb(89 136 242 / 0.5);
+user-select: none;
+transition: opacity 0.4s ease;
+}
+.slider-caption {
+margin-top: 18px;
+font-weight: 700;
+font-size: 1.15rem;
+color: #2e4a89;
+user-select: none;
+text-align: center;
+text-shadow: 0 0 8px rgb(194 210 247 / 0.7);
+}
+@media (max-width: 900px) {
+body {
+padding: 20px 10px;
+}
+.auth-flex {
+flex-direction: column;
+padding: 35px 20px;
+max-width: 100%;
+}
+.slider-card {
+max-width: none;
+margin-top: 16px;
+height: 300px;
+width: 100%;
+}
+}
+.demo-info {
+background: rgba(25, 118, 210, 0.1);
+border: 1px solid #1976d2;
+border-radius: 8px;
+padding: 12px;
+margin-bottom: 16px;
+font-size: 14px;
+color: #1976d2;
+text-align: center;
+cursor: pointer;
+}
+.demo-info:hover {
+background: rgba(25, 118, 210, 0.15);
+}
+</style>
 </head>
 <body>
-  <div class="auth-flex pagefade">
-    <!-- FORM -->
-    <form class="form-card" id="signupForm" autocomplete="on" tabindex="1" novalidate>
-      <h2>Sign Up to FINQ</h2>
-      <p>
-        Already have an account? <a href="login.html" class="footer-links">Login here</a>
-      </p>
-      <div class="form-grid" id="emailStage">
-        <input
-          required
-          type="email"
-          placeholder="E-mail address"
-          autocomplete="username"
-          id="semail"
-        />
-        <button type="button" id="requestOtpBtn" disabled>Request OTP</button>
-      </div>
-      <div class="form-grid hidden" id="otpStage">
-        <input
-          required
-          maxlength="6"
-          pattern="[0-9]{6}"
-          autofocus
-          placeholder="Enter OTP"
-          id="sotp"
-        />
-        <button type="button" id="verifyOtpBtn" disabled>Verify OTP</button>
-      </div>
-      <div class="form-grid hidden" id="passwordStage">
-        <div class="pwrow">
-          <input
-            required
-            type="password"
-            placeholder="Password"
-            autocomplete="new-password"
-            id="spass"
-            minlength="6"
-          />
-          <button type="button" class="toggle" tabindex="-1" onclick="togglePw('spass', this)">👁️</button>
-        </div>
-        <div class="pwrow">
-          <input
-            required
-            type="password"
-            placeholder="Confirm Password"
-            id="spass2"
-            minlength="6"
-          />
-          <button type="button" class="toggle" tabindex="-1" onclick="togglePw('spass2', this)">👁️</button>
-        </div>
-      </div>
-      <div class="g-recaptcha" data-sitekey="6LeN77grAAAAAEtlkWFhwBVLOaNuqLjGgO1JAWlu"></div>
-      <div class="form-actions" id="finalActions" hidden>
-        <button class="primary-btn" type="submit" id="signBtn" disabled>Sign Up to FINQ</button>
-        <div class="or-sep">or continue with</div>
-        <button class="oauth-btn" type="button" id="googleSign">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" />
-          Google
-        </button>
-        <button class="oauth-btn" type="button" id="appleSign">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg" />
-          Apple
-        </button>
-      </div>
-      <div class="error-msg" id="serr"></div>
-      <div class="footer-links">
-        <a href="help.html">Help</a>
-      </div>
-    </form>
-    <!-- SLIDER -->
-    <div class="slider-card">
-      <img id="simg" class="slider-img" src="" alt="Family finance" />
-      <div id="scap" class="slider-caption">Transparency in Family Finance</div>
-    </div>
-  </div>
+<div class="auth-flex">
+<form class="form-card" id="signupForm" autocomplete="on" tabindex="1" novalidate>
+<h2>Sign Up to FINQ</h2>
+<p>
+Already have an account? <a href="login.html" class="footer-link">Login here</a>
+</p>
+<div class="form-grid">
+<input type="email" id="semail" placeholder="E-mail address" autocomplete="username" required />
+<div class="pwrow" style="margin-top: 16px;">
+<input type="password" id="spass" placeholder="Password" autocomplete="new-password" minlength="6" required />
+<button type="button" class="toggle" tabindex="-1" onclick="togglePw('spass', this)">👁️</button>
+</div>
+<div class="pwrow">
+<input type="password" id="spass2" placeholder="Confirm Password" minlength="6" required />
+<button type="button" class="toggle" tabindex="-1" onclick="togglePw('spass2', this)">👁️</button>
+</div>
+</div>
+
+<div class="g-recaptcha" data-sitekey="6Le3PL4rAAAAAPjsj4jlgwSnsXSgeRS_yjltBnH7" style="margin-top: 18px; margin-bottom: 12px;"></div>
+
+<div class="form-actions">
+<button id="signBtn" class="primary-btn" type="submit" disabled>Sign Up to FINQ</button>
+<div style="color: #57719d; font-weight: 600; user-select: none;">or continue with</div>
+<button id="googleLog" class="oauth-btn" type="button">
+<div class="oauth-icon google-icon">G</div>
+Google
+</button>
+</div>
+<div id="serr" class="error-msg"></div>
+</form>
+<div class="slider-card">
+<img id="simg" src="" alt="Family finance" />
+<div id="scap" class="slider-caption">Transparency in Family Finance</div>
+</div>
+</div>
 
 <script>
-  // Toggle password visibility
-  function togglePw(id, btn) {
-    const input = document.getElementById(id);
-    input.type = input.type === "password" ? "text" : "password";
-    btn.textContent = input.type === "password" ? "👁️" : "🙈";
-  }
+function togglePw(id, btn) {
+  const input = document.getElementById(id);
+  input.type = input.type === "password" ? "text" : "password";
+  btn.textContent = input.type === "password" ? "👁️" : "🙈";
+}
 
-  // Elements and variables
-  const emailInput = document.getElementById("semail");
-  const requestOtpBtn = document.getElementById("requestOtpBtn");
-  const otpStage = document.getElementById("otpStage");
-  const otpInput = document.getElementById("sotp");
-  const verifyOtpBtn = document.getElementById("verifyOtpBtn");
-  const passwordStage = document.getElementById("passwordStage");
-  const finalActions = document.getElementById("finalActions");
+function validateInputs() {
+  const email = document.getElementById("semail").value.trim();
+  const pass = document.getElementById("spass").value;
+  const pass2 = document.getElementById("spass2").value;
   const signBtn = document.getElementById("signBtn");
-  const errorMsg = document.getElementById("serr");
-
-  // Validate email and enable Request OTP
-  emailInput.addEventListener("input", () => {
-    const validMail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput.value);
-    requestOtpBtn.disabled = !validMail;
-    errorMsg.textContent = validMail ? "" : "Enter a valid email address.";
-  });
-
-  // Request OTP click handler - calls backend signup API with reCAPTCHA token
-  requestOtpBtn.onclick = async () => {
-    errorMsg.textContent = "";
-    const recaptchaToken = grecaptcha.getResponse();
-    if (!recaptchaToken) {
-      errorMsg.textContent = "Please complete the CAPTCHA.";
-      return;
-    }
-    requestOtpBtn.disabled = true;
-
-    try {
-      const response = await fetch('/api/v1/auth/signup', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email: emailInput.value.trim(),
-          password: 'dummy', // OTP requested before password, so dummy here
-          recaptchaToken,
-        }),
-      });
-      const data = await response.json();
-      if (!response.ok) throw new Error(data.message || 'Signup failed.');
-
-      otpStage.classList.remove("hidden");
-      document.getElementById("emailStage").classList.add("hidden");
-      otpInput.focus();
-    } catch (err) {
-      errorMsg.textContent = err.message;
-    } finally {
-      requestOtpBtn.disabled = false;
-      grecaptcha.reset();
-    }
-  };
-
-  // OTP input validation
-  otpInput.addEventListener("input", () => {
-    verifyOtpBtn.disabled = otpInput.value.length !== 6 || !/^\d{6}$/.test(otpInput.value);
-    errorMsg.textContent = "";
-  });
-
-  // Verify OTP click handler - simulate OTP check, then show password stage
-  verifyOtpBtn.onclick = () => {
-    errorMsg.textContent = "";
-    if (otpInput.value === "123456") { // You may integrate real OTP verification backend API here
-      otpStage.classList.add("hidden");
-      passwordStage.classList.remove("hidden");
-      finalActions.hidden = false;
-      signBtn.disabled = true;
-      document.getElementById("spass").focus();
-    } else {
-      errorMsg.textContent = "Invalid OTP. Please try again.";
-    }
-  };
-
-  // Password and Confirm Password validation to enable signup button
-  function checkPasswords() {
-    const pass = document.getElementById("spass").value;
-    const pass2 = document.getElementById("spass2").value;
-    signBtn.disabled = !pass || !pass2 || pass.length < 6 || pass !== pass2;
-    errorMsg.textContent = (pass && pass2 && pass !== pass2) ? "Passwords do not match." : "";
+  const serr = document.getElementById("serr");
+  serr.textContent = "";
+  signBtn.disabled = !(email.length > 0 && pass.length >= 6 && pass === pass2);
+  if (pass && pass2 && pass !== pass2) {
+    serr.textContent = "Passwords do not match.";
   }
-  document.getElementById("spass").addEventListener("input", checkPasswords);
-  document.getElementById("spass2").addEventListener("input", checkPasswords);
+}
 
-  // Signup submit handler
-  document.getElementById("signupForm").onsubmit = async (e) => {
-    e.preventDefault();
-    errorMsg.textContent = "";
-    signBtn.disabled = true;
+document.getElementById("semail").addEventListener("input", validateInputs);
+document.getElementById("spass").addEventListener("input", validateInputs);
+document.getElementById("spass2").addEventListener("input", validateInputs);
 
-    const email = emailInput.value.trim();
-    const password = document.getElementById("spass").value;
-    const recaptchaToken = grecaptcha.getResponse();
-
-    if (!recaptchaToken) {
-      errorMsg.textContent = "Please complete the CAPTCHA.";
-      signBtn.disabled = false;
-      return;
-    }
-
-    try {
-      const response = await fetch('/api/v1/auth/signup', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password, recaptchaToken }),
-      });
-      const data = await response.json();
-      if (!response.ok) throw new Error(data.message || 'Signup failed.');
-
-      errorMsg.style.color = "#184089";
-      errorMsg.textContent = "Signup successful! Please check your email to verify your account.";
-
-      requestOtpBtn.disabled = true;
-      verifyOtpBtn.disabled = true;
-      signBtn.disabled = true;
-    } catch (err) {
-      errorMsg.style.color = "#e53935";
-      errorMsg.textContent = err.message;
-      signBtn.disabled = false;
-      grecaptcha.reset();
-    }
-  };
-
-  // Ripple effect on buttons
-  function createRipple(event) {
-    const button = event.currentTarget;
-    const circle = document.createElement("span");
-    const diameter = Math.max(button.clientWidth, button.clientHeight);
-    const radius = diameter / 2;
-    circle.style.width = circle.style.height = diameter + "px";
-    circle.style.left = event.clientX - button.getBoundingClientRect().left - radius + "px";
-    circle.style.top = event.clientY - button.getBoundingClientRect().top - radius + "px";
-    circle.classList.add("ripple");
-    const ripple = button.getElementsByClassName("ripple")[0];
-    if (ripple) ripple.remove();
-    button.appendChild(circle);
-  }
-  document.querySelectorAll(".primary-btn, .oauth-btn").forEach(btn => {
-    btn.addEventListener("click", createRipple);
+async function fetchJSON(url, options = {}) {
+  const res = await fetch(url, {
+    headers: { 'Content-Type': 'application/json', ...(options.headers || {}) },
+    ...options,
   });
+  let data;
+  try {
+    data = await res.json();
+  } catch {}
+  if (!res.ok) throw new Error(data?.message || `Request failed (${res.status})`);
+  return data;
+}
 
-  // Google OAuth button redirects for signup
-  document.getElementById("googleSign").onclick = () => {
-    window.location.href = '/api/v1/auth/google';
-  };
-  // Apple OAuth placeholder
-  document.getElementById("appleSign").onclick = () => alert("Apple signup coming soon!");
+document.getElementById("signupForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const serr = document.getElementById("serr");
+  serr.textContent = "";
+  const signBtn = document.getElementById("signBtn");
+  signBtn.disabled = true;
+  const email = document.getElementById("semail").value.trim();
+  const password = document.getElementById("spass").value;
+  const recaptchaToken = grecaptcha.getResponse();
+
+  if (!recaptchaToken) {
+    serr.textContent = "Please complete the CAPTCHA.";
+    signBtn.disabled = false;
+    return;
+  }
+
+  try {
+    await fetchJSON("http://localhost:8081/api/v1/auth/signup", {
+      method: "POST",
+      body: JSON.stringify({ email, password, recaptchaToken }),
+    });
+    serr.style.color = "#184089";
+    serr.textContent = "Signup successful! Please check your email to verify your account.";
+    setTimeout(() => {
+      window.location.href = "verify-email.html";
+    }, 2000);
+  } catch (err) {
+    serr.style.color = "#e53935";
+    serr.textContent = err.message;
+    signBtn.disabled = false;
+  } finally {
+    grecaptcha.reset();
+  }
+});
+const slides = [
+  {
+    src: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='500' height='300'><rect width='500' height='300' fill='%234fc3f7'/><text x='250' y='150' text-anchor='middle' dy='.3em' fill='white' font-family='Arial' font-size='24' font-weight='bold'>Secure Finance</text></svg>",
+    caption: "Secure Access to Your Finance"
+  },
+  {
+    src: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='500' height='300'><rect width='500' height='300' fill='%2386d7ab'/><text x='250' y='150' text-anchor='middle' dy='.3em' fill='white' font-family='Arial' font-size='24' font-weight='bold'>Family Budget</text></svg>",
+    caption: "Transparency in Family Finance"
+  },
+  {
+    src: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='500' height='300'><rect width='500' height='300' fill='%23ffd740'/><text x='250' y='150' text-anchor='middle' dy='.3em' fill='#184089' font-family='Arial' font-size='24' font-weight='bold'>Easy Tracking</text></svg>",
+    caption: "Track and Save Effortlessly"
+  }
+];
+
+let currentSlide = 0;
+const simg = document.getElementById("simg");
+const scap = document.getElementById("scap");
+
+function showSlide(idx) {
+  simg.src = slides[idx].src;
+  scap.textContent = slides[idx].caption;
+}
+showSlide(currentSlide);
+setInterval(() => {
+  currentSlide = (currentSlide + 1) % slides.length;
+  showSlide(currentSlide);
+}, 4000);
+
+
+document.getElementById("googleLog").addEventListener("click", () => {
+  window.location.href = "http://localhost:8081/api/v1/auth/google";
+});
 </script>
 </body>
 </html>
