@@ -77,6 +77,36 @@ async function updateProfile() {
     showToast(err.message, 'error');
   }
 }
+//LOGOS
+
+const AVATAR_LIST = [
+  'Images/profile/avatar1.png',
+  'Images/profile/avatar2.png',
+  'Images/profile/avatar3.png',
+  'Images/profile/avatar4.png',
+  'Images/profile/avatar5.png'
+];
+
+function assignRandomAvatar() {
+  if (sessionStorage.getItem('avatarUrl')) {
+    document.querySelector('.avatar').src = sessionStorage.getItem('avatarUrl');
+    return;
+  }
+  const url = AVATAR_LIST[Math.floor(Math.random() * AVATAR_LIST.length)];
+  sessionStorage.setItem('avatarUrl', url);
+  document.querySelector('.avatar').src = url;
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  assignRandomAvatar();
+  fetchProfile();
+});
+
+document.getElementById('logout-btn').onclick = () => {
+  sessionStorage.removeItem('accessToken');
+  window.location.href = '/login.html';
+};
+
 
 document.getElementById('save-prof').addEventListener('click', updateProfile);
 

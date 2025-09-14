@@ -1,4 +1,37 @@
-/* Reset and theme */
+/* Universal font */
+body, input, button, select, textarea, h1, h2, h3, h4, h5, h6 {
+  font-family: 'Segoe UI', 'Open Sans', 'Lato', Arial, sans-serif;
+}
+
+
+/* Action button in overview cards */
+.cards .add-btn {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  background: rgba(255, 255, 255, 0.3);
+  border: none;
+  border-radius: 50%;
+  font-size: 22px;
+  width: 32px;
+  height: 32px;
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  line-height: 26px;
+}
+.cards .add-btn:hover {
+  background: #fff;
+  color: var(--budget);
+}
+
+
+/* Make .card relative for add button */
+.cards .card {
+  position: relative;
+}
+
+
 * { margin: 0; padding: 0; box-sizing: border-box; }
 html { scroll-behavior: smooth; }
 body { 

@@ -14,6 +14,21 @@
 .profile-actions { display:flex; justify-content:flex-end; }
 .primary { padding:10px 16px; border:none; border-radius:10px; background:#4caf50; color:#fff; cursor:pointer; }
 
+.profile-row input, .profile-row select {
+  font-size: 1.1rem;
+  padding: 16px;
+}
+
+.profile-card, .profile-row, .avatar {
+  transition: all 0.3s cubic-bezier(.4,2,.7,.7);
+}
+
+.primary.secondary {
+  background: #f44336; /*Red logout button*/
+  margin-left: 10px;
+}
+
+
 @media (max-width: 700px) {
   .profile-row { grid-template-columns: 1fr; }
 }
