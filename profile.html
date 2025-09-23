@@ -1,67 +1,91 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>FINQ • Profile</title>
-  <link rel="stylesheet" href="detail.css" />
-  <link rel="stylesheet" href="profile.css" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FINQ • Profile</title>
+  <link rel="stylesheet" href="detail.css" />
+  <link rel="stylesheet" href="profile.css" />
 </head>
 <body class="preload" data-view="profile">
-  <div class="slider-wrap"><div class="slider-track"></div></div>
+  <div class="slider-wrap"><div class="slider-track"></div></div>
+  <div class="container">
+    <div class="topbar">
+      <button id="back-home" class="back">← Back</button>
+      <div class="title">User Profile</div>
+      <div></div>
+    </div>
 
-  <div class="container">
-    <div class="topbar">
-      <button id="back-home" class="back">← Back</button>
-      <div class="title">User Profile</div>
-      <div></div>
-    </div>
+    <div class="grid">
+      <section class="cardy profile-card">
+        <div class="profile-head">
+          <div class="avatar-wrap">
+            <img class="avatar" id="avatar-img" src="Images/profile/avatar.png" alt="Avatar" />
+          </div>
+          <div>
+            <h3 id="p-name">User</h3>
+            <div class="muted" id="p-email">—</div>
+          </div>
+        </div>
 
-    <div class="grid">
-      <section class="cardy profile-card">
-        <div class="profile-head">
-          <img class="avatar" src="Images/profile/avatar.png" alt="Avatar" />
-          <div>
-            <h3 id="p-name">User</h3>
-          </div>
-        </div>
+        <div class="profile-row">
+          <label>Display Name</label>
+          <input id="name-input" type="text" placeholder="Enter name" />
+        </div>
 
-        <div class="profile-row">
-          <label>Display Name</label>
-          <input id="name-input" type="text" placeholder="Enter name" />
-        </div>
+        <div class="profile-row">
+          <label>Email</label>
+          <input id="email-input" type="email" placeholder="email" disabled />
+        </div>
 
-        <div class="profile-row">
-          <label>Preferred Language</label>
-          <select id="lang-input">
-            <option value="en">English</option>
-            <option value="hi">हिंदी</option>
-          </select>
-        </div>
+        <div class="profile-row">
+          <label>Preferred Language</label>
+          <select id="lang-input">
+            <option value="en">English</option>
+            <option value="hi">हिंदी</option>
+          </select>
+        </div>
 
-        <div class="profile-row">
-          <label>Theme</label>
-          <div class="seg">
-            <button class="seg-btn" data-theme="light">Light</button>
-            <button class="seg-btn" data-theme="dark">Dark</button>
-          </div>
-        </div>
+        <div class="profile-row">
+          <label>Theme</label>
+          <div class="seg" id="theme-seg">
+            <button class="seg-btn active" data-theme="light">Light</button>
+            <button class="seg-btn" data-theme="dark">Dark</button>
+            <button class="seg-btn" data-theme="system">System</button>
+          </div>
+        </div>
 
-        <div class="profile-actions">
-          <button id="save-prof" class="primary">Save Changes</button>
-          <button id="logout-btn" class="primary secondary">Logout</button>
-        </div>
-      </section>
+        <div class="profile-row">
+          <label>Bio</label>
+          <textarea id="bio-input" placeholder="A short description..."></textarea>
+        </div>
 
-      <aside class="cardy">
-        <div class="section-title">Quick Stats</div>
-        <div class="stat"><span>Member Since</span><strong>2025</strong></div>
-        <div class="stat"><span>Total Transactions</span><strong id="prof-total">—</strong></div>
-      </aside>
-    </div>
-  </div>
+        <div class="profile-row">
+          <label>Avatar</label>
+          <div>
+            <div class="chips">
+              <button id="choose-avatar" class="seg-btn">Choose</button>
+              <button id="random-avatar" class="seg-btn">Randomize</button>
+            </div>
+            <div id="avatar-chooser" class="avatar-chooser" aria-label="Choose an avatar"></div>
+          </div>
+        </div>
 
-  <div id="toast-container"></div>
-  <script defer src="profile.js"></script>
+        <div class="profile-actions">
+          <button id="save-prof" class="primary">Save Changes</button>
+          <button id="logout-btn" class="primary secondary">Logout</button>
+        </div>
+      </section>
+
+      <aside class="cardy">
+        <div class="section-title">Quick Stats</div>
+        <div class="stat"><span>Member Since</span><strong id="member-since">—</strong></div>
+        <div class="stat"><span>Total Transactions</span><strong id="prof-total">—</strong></div>
+      </aside>
+    </div>
+  </div>
+
+  <div id="toast-container"></div>
+  <script defer src="profile.js"></script>
 </body>
 </html>
